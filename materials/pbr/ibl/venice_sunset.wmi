@@ -1,0 +1,6 @@
+"ibl"
+{
+	$texture prefilter "pbr/ibl/venice_sunset_prefilter"
+	$texture brdf "env/brdf"
+	$texture irradiance "pbr/ibl/venice_sunset_irradiance"
+}

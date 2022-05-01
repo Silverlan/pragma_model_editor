@@ -1,0 +1,36 @@
+#version 440
+
+#extension GL_ARB_separate_shader_objects : enable
+#extension GL_ARB_shading_language_420pack : enable
+
+#define SHADER_VERTEX_BUFFER_LOCATION 0
+#define SHADER_COLOR_BUFFER_LOCATION 1
+#define SHADER_BONE_INDEX_BUFFER_LOCATION 2
+
+#define SHADER_UNIFORM_BONE_MATRIX_SET 0
+#define SHADER_UNIFORM_BONE_MATRIX_BINDING 0
+
+#include "../modules/sh_limits.gls"
+#include "sh_mde_flat.gls"
+
+layout(std140,set = SHADER_UNIFORM_BONE_MATRIX_SET,binding = SHADER_UNIFORM_BONE_MATRIX_BINDING) uniform Bones
+{
+	mat4 matrices[MAX_BONES];
+} u_bones;
+
+layout(location = SHADER_VERTEX_BUFFER_LOCATION) in vec3 in_vert_pos;
+layout(location = SHADER_COLOR_BUFFER_LOCATION) in vec4 in_vert_color;
+layout(location = SHADER_BONE_INDEX_BUFFER_LOCATION) in int in_vert_bone;
+
+layout(push_constant) uniform Matrices {
+	mat4 MVP;
+} u_matrices;
+
+void main()
+{
+	vec4 pos = vec4(in_vert_pos,1.0);
+	if(in_vert_bone >= 0)
+		pos = u_bones.matrices[in_vert_bone] *pos;
+	gl_Position = u_matrices.MVP *pos;
+	vs_out.frag_col = in_vert_color;
+}
