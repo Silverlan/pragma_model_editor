@@ -6,6 +6,8 @@
     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ]]
 
+include("/gui/pfm/cursor_tracker.lua")
+
 util.register_class("gui.WIModelView",gui.Base)
 
 include("wimodelview_bodygroup.lua")
@@ -340,109 +342,6 @@ function gui.WIModelView:AddActor()
 	self.m_actors[i] = ent
 	self.m_actorData[#self.m_actors] = {}
 	return ent,#self.m_actors
-end
-function gui.WIModelView:OnMouseEvent(button,state,mods)
-	if(button == input.MOUSE_BUTTON_RIGHT) then
-		if(state == input.STATE_RELEASE) then
-			if(self.m_bMove and (self:GetCursorPos() -self.m_panningStartPos):LengthSqr() > 0.1) then return util.EVENT_REPLY_UNHANDLED end
-			self:SetPanningModeEnabled(false)
-
-			local ent = self:GetEntity()
-			local mdl = util.is_valid(ent) and ent:GetModel() or nil
-			if(mdl ~= nil) then
-				local anims = mdl:GetAnimationNames()
-				local pContext = gui.open_context_menu()
-				if(util.is_valid(pContext) == false) then return end
-
-				gui.WIModelView.add_default_actor_context_options(pContext,ent,function() self:Render() end)
-				if(#anims > 1) then
-					table.sort(anims)
-					local pItem,pSubMenu = pContext:AddSubMenu(locale.get_text("animation"))
-					for _,animName in ipairs(anims) do
-						local anim = mdl:GetAnimation(animName)
-						if(anim ~= nil and bit.band(anim:GetFlags(),game.Model.Animation.FLAG_GESTURE) == 0) then
-							local pItem = pSubMenu:AddItem(animName,function(pItem)
-								if(util.is_valid(ent) == false) then return end
-								ent:PlayAnimation(animName)
-								self:Render()
-								self.m_curAnim = nil
-							end)
-							pItem:AddCallback("OnSelectionChanged",function(pItem,selected)
-								if(util.is_valid(ent) == false) then return end
-								if(selected) then
-									self.m_curAnim = self.m_curAnim or ent:GetAnimation()
-									ent:PlayAnimation(animName)
-									self:Render()
-									return
-								end
-								if(self.m_curAnim == nil or pSubMenu:GetSelectedItem() ~= nil) then return end
-								ent:PlayAnimation(self.m_curAnim)
-								self:Render()
-								self.m_curAnim = nil
-							end)
-						end
-					end
-					pSubMenu:Update()
-				end
-
-				local flexAnims = mdl:GetFlexAnimationNames()
-				if(#flexAnims > 0) then
-					table.sort(flexAnims)
-					local pItem,pSubMenu = pContext:AddSubMenu(locale.get_text("flex_animation"))
-					pSubMenu:AddItem(locale.get_text("none"),function(pItem)
-						if(util.is_valid(ent) == false) then return end
-						local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
-						if(flexC ~= nil) then
-							for _,animId in ipairs(flexC:GetFlexAnimations()) do
-								flexC:StopFlexAnimation(animId)
-							end
-							for i=1,mdl:GetFlexControllerCount() do
-								flexC:SetFlexController(i -1,0.0)
-							end
-						end
-						self:Render()
-					end)
-					for _,animName in ipairs(flexAnims) do
-						local anim = mdl:GetFlexAnimation(mdl:LookupFlexAnimation(animName))
-						if(anim ~= nil) then
-							local pItem = pSubMenu:AddItem(animName,function(pItem)
-								if(util.is_valid(ent) == false) then return end
-								local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
-								if(flexC ~= nil) then flexC:PlayFlexAnimation(animName) end
-								self:Render()
-							end)
-							pItem:AddCallback("OnSelectionChanged",function(pItem,selected)
-								if(util.is_valid(ent) == false) then return end
-								if(selected) then
-									local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
-									if(flexC ~= nil) then flexC:PlayFlexAnimation(animName) end
-									self:Render()
-									return
-								end
-								if(pSubMenu:GetSelectedItem() ~= nil) then return end
-								local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
-								if(flexC ~= nil) then
-									for _,animId in ipairs(flexC:GetFlexAnimations()) do
-										flexC:StopFlexAnimation(animId)
-									end
-									for i=1,mdl:GetFlexControllerCount() do
-										flexC:SetFlexController(i -1,0.0)
-									end
-								end
-								self:Render()
-							end)
-						end
-					end
-					pSubMenu:Update()
-				end
-
-				pContext:Update()
-				if(pContext:GetItemCount() == 0) then gui.close_context_menu() end
-				return util.EVENT_REPLY_HANDLED
-			end
-		end
-	end
-	return util.EVENT_REPLY_UNHANDLED
 end
 function gui.WIModelView:InitializeViewport(width,height)
 	if(#self.m_actors == 0) then return end
@@ -799,19 +698,15 @@ function gui.WIModelView:SetPanningModeEnabled(enabled)
 	end
 	self.m_bMove = false
 end
-function gui.WIModelView:MouseCallback(button,action,mods)
-	gui.Base.MouseCallback(self,button,action,mods)
-	if(self.m_bCameraMovementEnabled == false) then return end
-	if(button == input.MOUSE_BUTTON_LEFT) then
-		self:SetRotationModeEnabled(action == input.STATE_PRESS)
-		return util.EVENT_REPLY_HANDLED
-	elseif(button == input.MOUSE_BUTTON_RIGHT) then
-		self:SetPanningModeEnabled(action == input.STATE_PRESS)
-		return util.EVENT_REPLY_HANDLED
-	end
-end
 function gui.WIModelView:OnThink()
 	gui.Base.OnThink(self)
+	if(self.m_cursorTracker ~= nil) then
+		self.m_cursorTracker:Update()
+		if(self.m_cursorTracker:HasExceededMoveThreshold(2)) then
+			self.m_cursorTracker = nil
+			self:SetPanningModeEnabled(true)
+		end
+	end
 	if(self.m_bRotate ~= true and self.m_bMove ~= true) then return end
 	local cursorPos = self:GetCursorPos()
 	local offset = cursorPos -self.m_tLastCursorPos
@@ -833,6 +728,129 @@ function gui.WIModelView:OnThink()
 		end
 	end
 	self.m_tLastCursorPos = cursorPos
+end
+function gui.WIModelView:MouseCallback(button,action,mods)
+	gui.Base.MouseCallback(self,button,action,mods)
+
+	if(button == input.MOUSE_BUTTON_RIGHT) then
+		if(action == input.STATE_PRESS) then
+			self.m_leftMouseInput = true
+			self.m_cursorTracker = gui.CursorTracker()
+			self:EnableThinking()
+		else
+			if(self.m_cursorTracker ~= nil) then
+				self.m_cursorTracker = nil
+
+				if(self.m_bMove and (self:GetCursorPos() -self.m_panningStartPos):LengthSqr() > 0.1) then return util.EVENT_REPLY_UNHANDLED end
+				self:SetPanningModeEnabled(false)
+
+				local ent = self:GetEntity()
+				local mdl = util.is_valid(ent) and ent:GetModel() or nil
+				if(mdl ~= nil) then
+					local anims = mdl:GetAnimationNames()
+					local pContext = gui.open_context_menu()
+					if(util.is_valid(pContext) == false) then return end
+
+					gui.WIModelView.add_default_actor_context_options(pContext,ent,function() self:Render() end)
+					if(#anims > 1) then
+						table.sort(anims)
+						local pItem,pSubMenu = pContext:AddSubMenu(locale.get_text("animation"))
+						for _,animName in ipairs(anims) do
+							local anim = mdl:GetAnimation(animName)
+							if(anim ~= nil and bit.band(anim:GetFlags(),game.Model.Animation.FLAG_GESTURE) == 0) then
+								local pItem = pSubMenu:AddItem(animName,function(pItem)
+									if(util.is_valid(ent) == false) then return end
+									ent:PlayAnimation(animName)
+									self:Render()
+									self.m_curAnim = nil
+								end)
+								pItem:AddCallback("OnSelectionChanged",function(pItem,selected)
+									if(util.is_valid(ent) == false) then return end
+									if(selected) then
+										self.m_curAnim = self.m_curAnim or ent:GetAnimation()
+										ent:PlayAnimation(animName)
+										self:Render()
+										return
+									end
+									if(self.m_curAnim == nil or pSubMenu:GetSelectedItem() ~= nil) then return end
+									ent:PlayAnimation(self.m_curAnim)
+									self:Render()
+									self.m_curAnim = nil
+								end)
+							end
+						end
+						pSubMenu:Update()
+					end
+
+					local flexAnims = mdl:GetFlexAnimationNames()
+					if(#flexAnims > 0) then
+						table.sort(flexAnims)
+						local pItem,pSubMenu = pContext:AddSubMenu(locale.get_text("flex_animation"))
+						pSubMenu:AddItem(locale.get_text("none"),function(pItem)
+							if(util.is_valid(ent) == false) then return end
+							local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
+							if(flexC ~= nil) then
+								for _,animId in ipairs(flexC:GetFlexAnimations()) do
+									flexC:StopFlexAnimation(animId)
+								end
+								for i=1,mdl:GetFlexControllerCount() do
+									flexC:SetFlexController(i -1,0.0)
+								end
+							end
+							self:Render()
+						end)
+						for _,animName in ipairs(flexAnims) do
+							local anim = mdl:GetFlexAnimation(mdl:LookupFlexAnimation(animName))
+							if(anim ~= nil) then
+								local pItem = pSubMenu:AddItem(animName,function(pItem)
+									if(util.is_valid(ent) == false) then return end
+									local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
+									if(flexC ~= nil) then flexC:PlayFlexAnimation(animName) end
+									self:Render()
+								end)
+								pItem:AddCallback("OnSelectionChanged",function(pItem,selected)
+									if(util.is_valid(ent) == false) then return end
+									if(selected) then
+										local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
+										if(flexC ~= nil) then flexC:PlayFlexAnimation(animName) end
+										self:Render()
+										return
+									end
+									if(pSubMenu:GetSelectedItem() ~= nil) then return end
+									local flexC = ent:GetComponent(ents.COMPONENT_FLEX)
+									if(flexC ~= nil) then
+										for _,animId in ipairs(flexC:GetFlexAnimations()) do
+											flexC:StopFlexAnimation(animId)
+										end
+										for i=1,mdl:GetFlexControllerCount() do
+											flexC:SetFlexController(i -1,0.0)
+										end
+									end
+									self:Render()
+								end)
+							end
+						end
+						pSubMenu:Update()
+					end
+
+					pContext:Update()
+					if(pContext:GetItemCount() == 0) then gui.close_context_menu() end
+					return util.EVENT_REPLY_HANDLED
+				end
+			else
+				self:SetPanningModeEnabled(false)
+			end
+		end
+		return util.EVENT_REPLY_HANDLED
+	end
+
+	if(self.m_bCameraMovementEnabled) then
+		if(button == input.MOUSE_BUTTON_LEFT) then
+			self:SetRotationModeEnabled(action == input.STATE_PRESS)
+			return util.EVENT_REPLY_HANDLED
+		end
+		return
+	end
 end
 function gui.WIModelView:ScrollCallback(xoffset,yoffset)
 	gui.Base.ScrollCallback(self,xoffset,yoffset)

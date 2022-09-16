@@ -12,8 +12,8 @@ function shader.MdeFlat:__init()
 end
 function shader.MdeFlat:OnInitialized()
 	local boneBuffer,instanceSize = ents.get_instance_bone_buffer()
-  self.m_descSetBone = self:CreateDescriptorSet(SHADER_UNIFORM_BONE_MATRIX_SET)
-  self.m_descSetBone:SetBindingUniformBufferDynamic(SHADER_UNIFORM_BONE_MATRIX_BINDING,boneBuffer,0,instanceSize)
+	self.m_descSetBone = self:GetShader():CreateDescriptorSet(SHADER_UNIFORM_BONE_MATRIX_SET)
+	self.m_descSetBone:SetBindingUniformBufferDynamic(SHADER_UNIFORM_BONE_MATRIX_BINDING,boneBuffer,0,instanceSize)
 end
 function shader.MdeFlat:InitializeRenderPass(pipelineIdx)
   return {shader.Scene3D.get_render_pass()}
@@ -90,21 +90,22 @@ function shader.MdeFlat:CreateBuffers(ent,color)
 end
 function shader.MdeFlat:OnPrepareDraw(drawCmd) end
 function shader.MdeFlat:Draw(drawCmd,ent,vertexBuffer,boneIndexBuffer,mvp,vertCount,firstVertex)
-	if(self:IsValid() == false) then return end
+	local baseShader = self:GetShader()
+	if(baseShader:IsValid() == false) then return end
 	local bindState = shader.BindState(drawCmd)
-	if(self:RecordBeginDraw(bindState) == false) then return end
+	if(baseShader:RecordBeginDraw(bindState) == false) then return end
 	local renderComponent = ent:GetComponent(ents.COMPONENT_RENDER)
 	local boneBuffer = (renderComponent ~= nil) and renderComponent:GetBoneBuffer() or nil
 	if(util.is_valid(boneBuffer) == false) then return end
 	vertCount = vertCount or vertexBuffer:GetSize() /(util.SIZEOF_VECTOR3 +util.SIZEOF_VECTOR4)
-  
-  self:RecordBindVertexBuffers(bindState,{vertexBuffer,boneIndexBuffer})
-	self:OnPrepareDraw(drawCmd)
+
+	baseShader:RecordBindVertexBuffers(bindState,{vertexBuffer,boneIndexBuffer})
+	baseShader:OnPrepareDraw(drawCmd)
 	self.m_dsMVP:Seek(0)
 	self.m_dsMVP:WriteMat4(mvp)
-  self:RecordPushConstants(bindState,self.m_dsMVP)
-  self:RecordBindDescriptorSet(bindState,self.m_descSetBone,SHADER_UNIFORM_BONE_MATRIX_SET,{boneBuffer:GetStartOffset()})
-	self:RecordDraw(bindState,vertCount,1,firstVertex or 0)
-	self:RecordEndDraw(bindState)
+	baseShader:RecordPushConstants(bindState,self.m_dsMVP)
+	baseShader:RecordBindDescriptorSet(bindState,self.m_descSetBone,SHADER_UNIFORM_BONE_MATRIX_SET,{boneBuffer:GetStartOffset()})
+	baseShader:RecordDraw(bindState,vertCount,1,firstVertex or 0)
+	baseShader:RecordEndDraw(bindState)
 end
 shader.register("mde_flat",shader.MdeFlat)
