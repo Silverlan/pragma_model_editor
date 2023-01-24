@@ -7,6 +7,7 @@
 ]]
 
 include("/gui/pfm/cursor_tracker.lua")
+include("/gui/wiviewport.lua")
 
 util.register_class("gui.WIModelView",gui.Base)
 
@@ -415,8 +416,9 @@ function gui.WIModelView:InitializeViewport(width,height)
 	self.m_drawSceneInfo.renderFlags = game.RENDER_FLAG_ALL
 	self.m_drawSceneInfo.scene = self.m_scene
 
-	local pBg = gui.create("WITexturedRect",self)
+	local pBg = gui.create("WIViewport",self)
 	pBg:SetAutoAlignToParent(true)
+	pBg:SetMovementControlsEnabled(false)
 	self.m_pBg = pBg
 	local bRender = false
 	--[[self.m_cbPrepass = game.add_callback("RenderPrepass",function()
@@ -731,7 +733,11 @@ function gui.WIModelView:OnThink()
 end
 function gui.WIModelView:MouseCallback(button,action,mods)
 	gui.Base.MouseCallback(self,button,action,mods)
-
+	if(button == input.MOUSE_BUTTON_LEFT) then
+		local handled,entActor,hitPos,startPos,hitData = ents.ClickComponent.inject_click_input(input.ACTION_ATTACK,action == input.STATE_PRESS)
+		if(handled == util.EVENT_REPLY_HANDLED) then return util.EVENT_REPLY_HANDLED end
+	end
+	--if(handled == util.EVENT_REPLY_UNHANDLED and util.is_valid(entActor)) then
 	if(button == input.MOUSE_BUTTON_RIGHT) then
 		if(action == input.STATE_PRESS) then
 			self.m_leftMouseInput = true
@@ -911,7 +917,7 @@ function gui.WIModelView:OnUpdate()
 	self.m_cam:SetAspectRatio(size.x /size.y)
 	self.m_cam:UpdateProjectionMatrix()
 
-	self.m_pBg:SetTexture(self.m_scene:GetRenderer():GetPresentationTexture())
+	self.m_pBg:SetScene(self.m_scene,self.m_scene:GetRenderer(),false)
 
 	-- self:UpdateModel()
 	self:Render()
