@@ -120,11 +120,11 @@ end
 function gui.WIModelEditorSkeleton:UpdateSkeleton()
 	local ent = self:GetEntity()
 	if(util.is_valid(ent) == false or self.m_shader == nil) then return end
-	local bufVerts,bufBoneIndices,offsets = self.m_shader:CreateBuffers(ent)
+	--[[local bufVerts,bufBoneIndices,offsets = self.m_shader:CreateBuffers(ent)
 	if(bufVerts == nil) then return end
 	self.m_bufVerts = bufVerts
 	self.m_bufBoneIndices = bufBoneIndices
-	self.m_bufBoneOffsets = offsets
+	self.m_bufBoneOffsets = offsets]]
 end
 function gui.WIModelEditorSkeleton:SetModel(mdl)
 	local pSkeleton = self.m_pBones
