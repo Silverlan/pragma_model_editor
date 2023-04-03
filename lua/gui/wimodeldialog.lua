@@ -85,7 +85,7 @@ function gui.WIModelDialog:OnInitialize()
 
 	self:InitializeAssetImporter(pTabPanel,tabMdlExplorer)
 
-	gui.create("WIResizer",contents)
+	local resizer = gui.create("WIResizer",contents)
 
 	local mdlViewer = gui.create("WIModelViewer",contents)
 	self.m_mdlViewer = mdlViewer
@@ -109,6 +109,8 @@ function gui.WIModelDialog:OnInitialize()
 	buttonContainer:Update()
 	buttonContainer:SetPos(contents:GetRight() -buttonContainer:GetWidth(),contents:GetBottom() +10)
 	buttonContainer:SetAnchor(1,1,1,1)
+
+	resizer:SetFraction(0.45)
 end
 function gui.WIModelDialog:InitializeAssetImporter(pTabPanel,tabMdlExplorer)
 	local tabAssetImporter = pTabPanel:AddTab(locale.get_text("mde_asset_importer"))
