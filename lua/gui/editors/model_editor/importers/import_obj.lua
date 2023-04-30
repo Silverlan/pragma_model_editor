@@ -8,7 +8,7 @@ gui.WIModelViewer.register_importer("obj",gui.WIModelViewer.IMPORT_TYPE_MESH,fun
 	for _,obj in ipairs(objs) do
 		local verts,triangles = obj:CalculateUniqueVertices()
 
-		local subMesh = Model.Mesh.Sub.Create()
+		local subMesh = Model.Mesh.Sub.create()
 		for _,v in ipairs(verts) do
 			subMesh:AddVertex(v)
 		end

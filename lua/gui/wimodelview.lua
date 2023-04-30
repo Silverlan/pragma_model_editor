@@ -149,7 +149,7 @@ function gui.WIModelView:GetGroundModel()
 	mdl = game.create_model(modelName)
 	mdl:SetMass(10.0)
 
-	local subMesh = Model.Mesh.Sub.CreateQuad(util.metres_to_units(2))
+	local subMesh = Model.Mesh.Sub.create_quad(game.Model.QuadCreateInfo(util.metres_to_units(2)))
 	local mesh = Model.Mesh.Create()
 	mesh:AddSubMesh(subMesh)
   

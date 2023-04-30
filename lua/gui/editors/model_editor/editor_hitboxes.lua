@@ -45,7 +45,7 @@ function gui.WIModelEditorHitboxes:SetModel(mdl)
 
 	local dsFlatVerts = util.DataStream()
 	local dsFlatIndices = util.DataStream()
-	local boxMesh = Model.Mesh.Sub.CreateBox(Vector(-1,-1,-1),Vector(1,1,1)) -- TODO: Don't create buffers!
+	local boxMesh = Model.Mesh.Sub.create_box(game.Model.BoxCreateInfo(Vector(-1,-1,-1),Vector(1,1,1))) -- TODO: Don't create buffers!
 	local boxVerts = boxMesh:GetVertices()
 	local boxTriangles = boxMesh:GetIndices()
 
