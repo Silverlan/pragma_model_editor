@@ -785,6 +785,7 @@ function gui.WIModelView:MouseCallback(button,action,mods)
 								end)
 							end
 						end
+						self:CallCallbacks("PopulateContextMenu",pContext)
 						pSubMenu:Update()
 					end
 
