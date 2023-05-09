@@ -1,4 +1,4 @@
-util.register_class("shader.MdeTextured",shader.BasePbr)
+util.register_class("shader.MdeTextured", shader.BasePbr)
 
 shader.MdeTextured.FragmentShader = "mde/fs_mde_textured"
 shader.MdeTextured.VertexShader = "world/vs_textured"
@@ -7,6 +7,6 @@ function shader.MdeTextured:__init()
 end
 
 function shader.MdeTextured:Draw(mesh)
-	shader.BasePbr.Draw(self,mesh)
+	shader.BasePbr.Draw(self, mesh)
 end
-shader.register("mde_textured",shader.MdeTextured)
+shader.register("mde_textured", shader.MdeTextured)
