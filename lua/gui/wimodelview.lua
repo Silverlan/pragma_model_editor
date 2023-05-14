@@ -288,17 +288,13 @@ function gui.WIModelView:CreateLightSource()
 
 	local colorC = entLight:GetComponent(ents.COMPONENT_COLOR)
 	if colorC ~= nil then
-		colorC:SetColor(
-			light.color_temperature_to_color(
-				light.get_average_color_temperature(light.NATURAL_LIGHT_TYPE_CLEAR_BLUESKY)
-			)
-		)
+		colorC:SetColor(Color(180, 210, 230))
 	end
 
 	local lightC = entLight:GetComponent(ents.COMPONENT_LIGHT)
 	if lightC ~= nil then
-		lightC:SetShadowType(ents.LightComponent.SHADOW_TYPE_FULL)
-		lightC:SetLightIntensity(4)
+		lightC:SetShadowType(ents.LightComponent.SHADOW_TYPE_NONE)
+		lightC:SetLightIntensity(14)
 	end
 	local toggleC = entLight:GetComponent(ents.COMPONENT_TOGGLE)
 	if toggleC ~= nil then
@@ -774,12 +770,12 @@ function gui.WIModelView:UpdateModel()
 	--local mdl = (mdlComponent ~= nil) and mdlComponent:GetModel() or nil
 	--if(mdl ~= nil) then self.m_meshes = mdl:GetBodyGroupMeshes(0) end
 
-	self:FitCameraToScene()
+	return self:FitCameraToScene()
 end
 function gui.WIModelView:FitCameraToScene(min, max)
 	local vc = self:GetViewerCamera()
 	if vc ~= nil then
-		vc:FitViewToScene(min, max)
+		return vc:FitViewToScene(min, max)
 	end
 end
 function gui.WIModelView:SetParticleSystem(ptSystem)
@@ -861,8 +857,8 @@ function gui.WIModelView:SetModel(mdl, actorIdx)
 	if bValid == false then
 		return false
 	end
-	self:UpdateModel()
-	return true
+	local min, max = self:UpdateModel()
+	return true, min, max
 end
 function gui.WIModelView:SetRotationModeEnabled(enabled)
 	if enabled then
