@@ -569,6 +569,9 @@ end
 function gui.WIModelView:GetDrawSceneInfo()
 	return self.m_drawSceneInfo
 end
+function gui.WIModelView:SetToneMapping(toneMapping)
+	self.m_drawSceneInfo.toneMapping = toneMapping
+end
 function gui.WIModelView:DrawScene(immediate)
 	if #self.m_actors == 0 or util.is_valid(self.m_scene) == false then
 		return
@@ -621,7 +624,7 @@ function gui.WIModelView:DrawScene(immediate)
 	)]]
 
 	self.m_frameIndex = self.m_frameIndex + 1
-	bRender = true
+	local bRender = true
 	--[[for _,ent in ipairs(self.m_actors) do
 		if(ent:IsValid()) then
 			local renderComponent = ent:GetComponent(ents.COMPONENT_RENDER)

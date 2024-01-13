@@ -12,19 +12,20 @@ local function base_get_bodygroup_data(mdl, bgId, bgVal, skin)
 		return
 	end
 	local meshGroup = mdl:GetMeshGroup(mgId)
-	local dbgVerts = {}
 	local min, max
 	local materialIndices = {}
-	local nVerts = 0
-	for _, mesh in ipairs(meshGroup:GetMeshes()) do
-		for _, subMesh in ipairs(mesh:GetSubMeshes()) do
-			local verts = subMesh:GetVertices()
-			local tris = subMesh:GetIndices()
+	local subMeshes = {}
+	for meshIdx, mesh in ipairs(meshGroup:GetMeshes()) do
+		for subMeshIdx, subMesh in ipairs(mesh:GetSubMeshes()) do
 			local matIdx = mdl:GetMaterialIndex(subMesh, skin)
 			if matIdx ~= nil then
 				materialIndices[matIdx] = true
+				table.insert(subMeshes, {
+					meshGroupIdx = mgId,
+					meshIdx = meshIdx - 1,
+					subMeshIdx = subMeshIdx - 1,
+				})
 			end
-			nVerts = nVerts + #verts
 		end
 
 		min = min or Vector(math.huge, math.huge, math.huge)
@@ -39,91 +40,80 @@ local function base_get_bodygroup_data(mdl, bgId, bgVal, skin)
 			end
 		end
 	end
-	return materialIndices, min or Vector(), max or Vector()
+	return materialIndices, min or Vector(), max or Vector(), subMeshes
 end
 
 local function get_bodygroup_data(mdl, bgId, bgVal, skin)
-	local materialIndices, min, max = base_get_bodygroup_data(mdl, bgId, bgVal, skin)
+	local materialIndices, min, max, subMeshIndexData = base_get_bodygroup_data(mdl, bgId, bgVal, skin)
 	local function is_valid(materialIndices, min, max)
 		return materialIndices ~= nil and table.is_empty(materialIndices) == false and min:DistanceSqr(max) > 0.001
 	end
 	if is_valid(materialIndices, min, max) then
-		return materialIndices, min, max, true
+		return materialIndices, min, max, true, subMeshIndexData
 	end
 
 	-- Unable to determine bounds for bodygroup; Try other configurations
 	if bgVal ~= 0 then
-		local materialIndices, min, max = base_get_bodygroup_data(mdl, bgId, 0, skin)
-		if is_valid(materialIndices, min, max) then
-			return materialIndices, min, max, false
+		local materialIndices2, min, max, subMeshIndexData = base_get_bodygroup_data(mdl, bgId, 0, skin)
+		if is_valid(materialIndices2, min, max) then
+			return materialIndices or materialIndices2, min, max, false, subMeshIndexData
 		end
 	end
 	if bgVal == 1 then
-		return materialIndices, min, max, false
+		return materialIndices, min, max, false, subMeshIndexData
 	end
-	materialIndices, min, max = base_get_bodygroup_data(mdl, bgId, 1, skin)
-	return materialIndices, min, max, false
+	local materialIndices2
+	materialIndices2, min, max, subMeshIndexData = base_get_bodygroup_data(mdl, bgId, 1, skin)
+	return materialIndices2 or materialIndices, min, max, false, subMeshIndexData
 end
 
-local function create_translucent_material(mat)
-	local matCopy = mat:Copy()
-	local db = matCopy:GetDataBlock()
-	-- db:SetValue("int","alpha_mode",tostring(game.Material.ALPHA_MODE_BLEND))
-	-- db:SetValue("float","alpha_factor","0.4")
-
-	db:SetValue("vector", "color_factor", "0.05 0.05 0.05")
-	matCopy:SetShader("unlit")
-	return matCopy
-end
-
-local function make_non_bodygroup_materials_translucent(mdlC, materialIndices)
-	local mdl = mdlC:GetModel()
-	if mdl == nil then
-		return
+-- Generate a copy of the model where all meshes except the specified ones are blacked out
+local function generate_model_copy_with_blacked_out_parts(mdl, meshIndices)
+	local matBlack = game.load_material("black_unlit")
+	local cpy = mdl:Copy(game.Model.FCOPY_BIT_MESHES)
+	local matIdx, skinMatIdx = cpy:AddMaterial(0, matBlack)
+	local meshIdxMap = {}
+	for _, indexData in ipairs(meshIndices) do
+		meshIdxMap[indexData.meshGroupIdx] = meshIdxMap[indexData.meshGroupIdx] or {}
+		meshIdxMap[indexData.meshGroupIdx][indexData.meshIdx] = meshIdxMap[indexData.meshGroupIdx][indexData.meshIdx]
+			or {}
+		meshIdxMap[indexData.meshGroupIdx][indexData.meshIdx][indexData.subMeshIdx] = true
 	end
-	for idx, mat in ipairs(mdl:GetMaterials()) do
-		if materialIndices[idx - 1] ~= true then
-			mdlC:SetMaterialOverride(idx - 1, create_translucent_material(mat))
+	for mgIdx, meshGroup in ipairs(cpy:GetMeshGroups()) do
+		for mIdx, mesh in ipairs(meshGroup:GetMeshes()) do
+			for smIdx, subMesh in ipairs(mesh:GetSubMeshes()) do
+				if
+					meshIdxMap[mgIdx - 1] == nil
+					or meshIdxMap[mgIdx - 1][mIdx - 1] == nil
+					or meshIdxMap[mgIdx - 1][mIdx - 1][smIdx - 1] ~= true
+				then
+					subMesh:SetSkinTextureIndex(skinMatIdx)
+				end
+			end
 		end
 	end
+	return cpy
 end
 
 function gui.WIModelView:SetBodyPart(bgId, bgVal)
 	local ent = self:GetEntity()
 	local mdl = ent:GetModel()
-	local materialIndices, min, max, native = get_bodygroup_data(mdl, bgId, bgVal, ent:GetSkin())
-	local extents = (min ~= nil) and min:DistanceSqr(max) or 0.0
-	local extentsVisible = extents > 0.0001
-	if materialIndices ~= nil and extentsVisible == false then
-		local mdl = ent:GetModel()
-		local mdlC = ent:GetComponent(ents.COMPONENT_MODEL)
-		if mdl ~= nil and mdlC ~= nil then
-			if native then
-				for i, mat in ipairs(mdl:GetMaterials()) do
-					mdlC:SetMaterialOverride(i - 1, create_translucent_material(mat))
-				end
+	local materialIndices, min, max, native, subMeshIndexData = get_bodygroup_data(mdl, bgId, bgVal, ent:GetSkin())
+	local mdlCpy = generate_model_copy_with_blacked_out_parts(mdl, subMeshIndexData)
+	ent:SetModel(mdlCpy)
+	if materialIndices ~= nil then
+		if min:DistanceSqr(max) > 0.0001 then
+			local viewerCam = self:GetViewerCamera()
+			if util.is_valid(viewerCam) then
+				viewerCam:FitViewToScene(min, max)
 			end
 		end
-		-- self:SetCrossedOut(true)
-	else
-		if materialIndices ~= nil then
-			if min:DistanceSqr(max) > 0.0001 then
-				if native then
-					make_non_bodygroup_materials_translucent(ent:GetComponent(ents.COMPONENT_MODEL), materialIndices)
-				end
+	end
 
-				local viewerCam = self:GetViewerCamera()
-				if util.is_valid(viewerCam) then
-					viewerCam:FitViewToScene(min, max)
-				end
-			end
-		end
-
-		local mdlC = util.is_valid(ent) and ent:GetComponent(ents.COMPONENT_MODEL) or nil
-		if mdlC ~= nil then
-			if bgId ~= -1 then
-				mdlC:SetBodyGroup(bgId, bgVal)
-			end
+	local mdlC = util.is_valid(ent) and ent:GetComponent(ents.COMPONENT_MODEL) or nil
+	if mdlC ~= nil then
+		if bgId ~= -1 then
+			mdlC:SetBodyGroup(bgId, bgVal)
 		end
 	end
 end
