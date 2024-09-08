@@ -8,8 +8,8 @@
 	float fragColorA; \
 	int boneId;
 
-#include "../modules/sh_vertex_data_locations.gls"
-#include "../modules/sh_export.gls"
+#include "/common/vertex_data_locations.glsl"
+#include "/common/export.glsl"
 
 #define SHADER_WEIGHT_ALPHA_LOCATION SHADER_USER1_LOCATION
 

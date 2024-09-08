@@ -1,7 +1,7 @@
 util.register_class("shader.MdeWireframe", shader.BaseTexturedLit3D)
 
-shader.MdeWireframe.FragmentShader = "mde/fs_mde_wireframe"
-shader.MdeWireframe.VertexShader = "mde/vs_mde_wireframe"
+shader.MdeWireframe.FragmentShader = "programs/mde/wireframe"
+shader.MdeWireframe.VertexShader = "programs/mde/wireframe"
 shader.MdeWireframe.WIREFRAME_COLOR = Color(255, 255, 128, 255):ToVector4()
 shader.MdeWireframe.SetWireframeColor = function(color)
 	shader.MdeWireframe.WIREFRAME_COLOR = color:ToVector4()
@@ -18,8 +18,8 @@ function shader.MdeWireframe:InitializePipeline(pipelineInfo, pipelineIdx)
 	pipelineInfo:SetPolygonMode(prosper.POLYGON_MODE_LINE)
 	pipelineInfo:SetLineWidth(2)
 end
-function shader.MdeWireframe:InitializeGfxPipelinePushConstantRanges(pipelineInfo, pipelineIdx)
-	pipelineInfo:AttachPushConstantRange(
+function shader.MdeWireframe:InitializeGfxPipelinePushConstantRanges()
+	self:AttachPushConstantRange(
 		0,
 		shader.TexturedLit3D.PUSH_CONSTANTS_SIZE + self.m_dsPushConstants:GetSize(),
 		bit.bor(prosper.SHADER_STAGE_FRAGMENT_BIT, prosper.SHADER_STAGE_VERTEX_BIT)

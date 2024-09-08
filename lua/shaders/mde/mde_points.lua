@@ -1,7 +1,7 @@
 util.register_class("shader.MdePoints", shader.BaseTexturedLit3D)
 
-shader.MdePoints.FragmentShader = "mde/fs_mde_wireframe"
-shader.MdePoints.VertexShader = "mde/vs_mde_wireframe"
+shader.MdePoints.FragmentShader = "programs/mde/wireframe"
+shader.MdePoints.VertexShader = "programs/mde/wireframe"
 shader.MdePoints.POINT_COLOR = Color.Red:ToVector4()
 shader.MdePoints.SetPointColor = function(color)
 	shader.MdePoints.POINT_COLOR = color:ToVector4()
@@ -19,8 +19,8 @@ function shader.MdePoints:InitializePipeline(pipelineInfo, pipelineIdx)
 	pipelineInfo:SetDynamicStateEnabled(prosper.DYNAMIC_STATE_LINE_WIDTH_BIT, true)
 	pipelineInfo:SetLineWidth(4)
 end
-function shader.MdePoints:InitializeGfxPipelinePushConstantRanges(pipelineInfo, pipelineIdx)
-	pipelineInfo:AttachPushConstantRange(
+function shader.MdePoints:InitializeGfxPipelinePushConstantRanges()
+	self:AttachPushConstantRange(
 		0,
 		shader.TexturedLit3D.PUSH_CONSTANTS_SIZE + self.m_dsPushConstants:GetSize(),
 		bit.bor(prosper.SHADER_STAGE_FRAGMENT_BIT, prosper.SHADER_STAGE_VERTEX_BIT)

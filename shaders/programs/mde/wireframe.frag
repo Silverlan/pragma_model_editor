@@ -3,11 +3,9 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-#include "sh_mde_wireframe.gls"
-#include "../modules/fs_scene.gls"
-#include "../modules/sh_instance_info.gls"
-#include "../world/pbr/fs_config.gls"
-#include "../../modules/sh_csm.gls"
+#include "wireframe.glsl"
+#include "/common/pixel_outputs/fs_bloom_color.glsl"
+#include "/programs/scene/scene_push_constants.glsl"
 
 void main()
 {

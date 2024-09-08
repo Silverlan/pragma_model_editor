@@ -1,6 +1,6 @@
 include("mde_flat.lua")
 util.register_class("shader.MdeSkeleton", shader.MdeFlat)
-shader.MdeSkeleton.FragmentShader = "mde/fs_mde_skeleton"
+shader.MdeSkeleton.FragmentShader = "programs/mde/skeleton"
 function shader.MdeSkeleton:__init()
 	shader.MdeFlat.__init(self)
 end

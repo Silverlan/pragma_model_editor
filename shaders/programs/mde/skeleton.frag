@@ -3,7 +3,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-#include "sh_mde_flat.gls"
+#include "flat.glsl"
 
 layout(location = 0) out vec4 fs_color;
 layout(location = 1) out vec4 fs_bloom;

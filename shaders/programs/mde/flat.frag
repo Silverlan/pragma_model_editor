@@ -9,9 +9,8 @@
 	float fragColorB; \
 	float fragColorA; // Can't use vec4 due to alignment
 
-#include "../modules/fs_scene.gls"
-#include "../modules/sh_instance_info.gls"
-#include "../world/pbr/fs_config.gls"
+#include "/common/pixel_outputs/fs_bloom_color.glsl"
+#include "/programs/scene/scene_push_constants.glsl"
 
 void main()
 {

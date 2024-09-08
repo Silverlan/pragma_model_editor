@@ -6,7 +6,7 @@
 #define SHADER_VERTEX_BUFFER_LOCATION 0
 #define SHADER_VERTEX_COLOR_LOCATION 1
 
-#include "sh_mde_wireframe_simple.gls"
+#include "wireframe_simple.glsl"
 
 layout(location = SHADER_VERTEX_BUFFER_LOCATION) in vec3 in_vert_pos;
 layout(location = SHADER_VERTEX_COLOR_LOCATION) in vec3 in_vert_col;

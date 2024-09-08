@@ -3,13 +3,12 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-#include "sh_mde_vertex_weights.gls"
-#include "../world/pbr/vs_config.gls"
-#include "../../modules/vs_world.gls"
+#include "vertex_weights.glsl"
+#include "/programs/scene/vs_world.glsl"
 
 void main()
 {
-	export_world_fragment_data();
+	export_world_fragment_data(false, false);
 	vs_weight_alpha_out.alpha = 0.0;
 	for(int i=0;i<4;i++)
 	{

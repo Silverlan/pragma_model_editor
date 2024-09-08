@@ -1,7 +1,7 @@
 util.register_class("shader.MdeTextured", shader.BasePbr)
 
-shader.MdeTextured.FragmentShader = "mde/fs_mde_textured"
-shader.MdeTextured.VertexShader = "world/vs_textured"
+shader.MdeTextured.FragmentShader = "programs/mde/textured"
+shader.MdeTextured.VertexShader = "programs/scene/textured"
 function shader.MdeTextured:__init()
 	shader.BasePbr.__init(self)
 end

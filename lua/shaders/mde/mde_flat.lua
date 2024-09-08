@@ -3,8 +3,8 @@ util.register_class("shader.MdeFlat", shader.BaseGraphics)
 local SHADER_UNIFORM_BONE_MATRIX_SET = 0
 local SHADER_UNIFORM_BONE_MATRIX_BINDING = 0
 
-shader.MdeFlat.FragmentShader = "mde/fs_mde_flat_vertex_color"
-shader.MdeFlat.VertexShader = "mde/vs_mde_flat_vertex_color"
+shader.MdeFlat.FragmentShader = "programs/mde/flat_vertex_color"
+shader.MdeFlat.VertexShader = "programs/mde/flat_vertex_color"
 
 function shader.MdeFlat:__init()
 	shader.BaseGraphics.__init(self)
@@ -18,22 +18,26 @@ end
 function shader.MdeFlat:InitializeRenderPass(pipelineIdx)
 	return { shader.Scene3D.get_render_pass() }
 end
-function shader.MdeFlat:InitializePipeline(pipelineInfo, pipelineIdx)
-	shader.BaseGraphics.InitializePipeline(self, pipelineInfo, pipelineIdx)
-	pipelineInfo:AttachVertexAttribute(shader.VertexBinding(prosper.VERTEX_INPUT_RATE_VERTEX), {
+function shader.MdeFlat:InitializeShaderResources()
+	shader.BaseGraphics.InitializeShaderResources(self)
+	self:AttachVertexAttribute(shader.VertexBinding(prosper.VERTEX_INPUT_RATE_VERTEX), {
 		shader.VertexAttribute(prosper.FORMAT_R32G32B32_SFLOAT), -- Position
 		shader.VertexAttribute(prosper.FORMAT_R32G32B32A32_SFLOAT), -- Color
 	})
-	pipelineInfo:AttachVertexAttribute(shader.VertexBinding(prosper.VERTEX_INPUT_RATE_VERTEX), {
+	self:AttachVertexAttribute(shader.VertexBinding(prosper.VERTEX_INPUT_RATE_VERTEX), {
 		shader.VertexAttribute(prosper.FORMAT_R32_SINT), -- Bone Ids
 	})
-
-	pipelineInfo:AttachDescriptorSetInfo(shader.DescriptorSetInfo({
-		shader.DescriptorSetBinding(prosper.DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, prosper.SHADER_STAGE_VERTEX_BIT),
+	self:AttachDescriptorSetInfo(shader.DescriptorSetInfo("BONES", {
+		shader.DescriptorSetBinding(
+			"MATRIX_DATA",
+			prosper.DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+			prosper.SHADER_STAGE_VERTEX_BIT
+		),
 	}))
-
-	pipelineInfo:AttachPushConstantRange(0, util.SIZEOF_MAT4, prosper.SHADER_STAGE_VERTEX_BIT)
-
+	self:AttachPushConstantRange(0, util.SIZEOF_MAT4, prosper.SHADER_STAGE_VERTEX_BIT)
+end
+function shader.MdeFlat:InitializePipeline(pipelineInfo, pipelineIdx)
+	shader.BaseGraphics.InitializePipeline(self, pipelineInfo, pipelineIdx)
 	pipelineInfo:SetPolygonMode(prosper.POLYGON_MODE_FILL)
 	pipelineInfo:SetPrimitiveTopology(prosper.PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
 	pipelineInfo:SetDepthTestEnabled(true)

@@ -7,13 +7,10 @@
 #define SHADER_COLOR_BUFFER_LOCATION 1
 #define SHADER_BONE_INDEX_BUFFER_LOCATION 2
 
-#define SHADER_UNIFORM_BONE_MATRIX_SET 0
-#define SHADER_UNIFORM_BONE_MATRIX_BINDING 0
+#include "/common/limits.glsl"
+#include "flat.glsl"
 
-#include "../modules/sh_limits.gls"
-#include "sh_mde_flat.gls"
-
-layout(std140,set = SHADER_UNIFORM_BONE_MATRIX_SET,binding = SHADER_UNIFORM_BONE_MATRIX_BINDING) uniform Bones
+layout(std140,LAYOUT_ID(BONES,MATRIX_DATA)) uniform Bones
 {
 	mat4 matrices[MAX_BONES];
 } u_bones;

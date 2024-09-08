@@ -2,8 +2,8 @@ include("mde_textured.lua")
 
 util.register_class("shader.MdeVertexWeights", shader.MdeTextured)
 
-shader.MdeVertexWeights.FragmentShader = "mde/fs_mde_vertex_weights"
-shader.MdeVertexWeights.VertexShader = "mde/vs_mde_vertex_weights"
+shader.MdeVertexWeights.FragmentShader = "programs/mde/vertex_weights"
+shader.MdeVertexWeights.VertexShader = "programs/mde/vertex_weights"
 shader.MdeVertexWeights.MESH_COLOR = Color.Magenta:ToVector4()
 shader.MdeVertexWeights.SetMeshColor = function(color)
 	shader.MdeVertexWeights.MESH_COLOR = color:ToVector4()
@@ -13,8 +13,8 @@ function shader.MdeVertexWeights:__init()
 
 	self.m_dsBone = util.DataStream(util.SIZEOF_VECTOR4 + util.SIZEOF_INT)
 end
-function shader.MdeVertexWeights:InitializeGfxPipelinePushConstantRanges(pipelineInfo, pipelineIdx)
-	pipelineInfo:AttachPushConstantRange(
+function shader.MdeVertexWeights:InitializeGfxPipelinePushConstantRanges()
+	self:AttachPushConstantRange(
 		0,
 		shader.TexturedLit3D.PUSH_CONSTANTS_SIZE + self.m_dsBone:GetSize(),
 		bit.bor(prosper.SHADER_STAGE_FRAGMENT_BIT, prosper.SHADER_STAGE_VERTEX_BIT)

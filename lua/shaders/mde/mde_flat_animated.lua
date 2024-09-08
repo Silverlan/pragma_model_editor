@@ -2,12 +2,12 @@ include("mde_textured.lua")
 
 util.register_class("shader.MdeFlatAnimated", shader.MdeTextured)
 
-shader.MdeFlatAnimated.FragmentShader = "mde/fs_mde_flat"
+shader.MdeFlatAnimated.FragmentShader = "programs/mde/flat"
 function shader.MdeFlatAnimated:__init()
 	shader.MdeTextured.__init(self)
 end
-function shader.MdeFlatAnimated:InitializeGfxPipelinePushConstantRanges(pipelineInfo, pipelineIdx)
-	pipelineInfo:AttachPushConstantRange(
+function shader.MdeFlatAnimated:InitializeGfxPipelinePushConstantRanges()
+	self:AttachPushConstantRange(
 		0,
 		shader.TexturedLit3D.PUSH_CONSTANTS_SIZE + util.SIZEOF_VECTOR4,
 		bit.bor(prosper.SHADER_STAGE_FRAGMENT_BIT, prosper.SHADER_STAGE_VERTEX_BIT)

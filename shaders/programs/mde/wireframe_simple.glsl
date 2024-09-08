@@ -1,9 +1,9 @@
-#ifndef F_SH_MDE_SKELETON_GLS
-#define F_SH_MDE_SKELETON_GLS
-
-#include "../modules/sh_export.gls"
+#ifndef F_SH_MDE_WIREFRAME_SIMPLE_GLS
+#define F_SH_MDE_WIREFRAME_SIMPLE_GLS
 
 #define SHADER_VERTEX_DATA_LOCATION 0
+
+#include "/common/export.glsl"
 
 layout(location = SHADER_VERTEX_DATA_LOCATION) EXPORT_VS VS_OUT
 {
