@@ -11,7 +11,7 @@
 layout(location = SHADER_VERTEX_BUFFER_LOCATION) in vec3 in_vert_pos;
 layout(location = SHADER_VERTEX_COLOR_LOCATION) in vec3 in_vert_col;
 
-layout(push_constant) uniform Matrices {
+layout(LAYOUT_PUSH_CONSTANTS()) uniform Matrices {
 	mat4 MVP;
 } u_matrices;
 

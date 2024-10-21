@@ -19,7 +19,7 @@ layout(location = SHADER_VERTEX_BUFFER_LOCATION) in vec3 in_vert_pos;
 layout(location = SHADER_COLOR_BUFFER_LOCATION) in vec4 in_vert_color;
 layout(location = SHADER_BONE_INDEX_BUFFER_LOCATION) in int in_vert_bone;
 
-layout(push_constant) uniform Matrices {
+layout(LAYOUT_PUSH_CONSTANTS()) uniform Matrices {
 	mat4 MVP;
 } u_matrices;
 
