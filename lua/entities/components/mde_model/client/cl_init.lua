@@ -99,4 +99,9 @@ function ents.MdeModelPreviewComponent:HandleAnimationEvent(evId, args)
 	end
 	return util.EVENT_REPLY_UNHANDLED
 end
-ents.COMPONENT_MDE_MODEL_PREVIEW = ents.register_component("mde_model", ents.MdeModelPreviewComponent)
+ents.register_component(
+	"mde_model",
+	ents.MdeModelPreviewComponent,
+	"editor",
+	ents.EntityComponent.FREGISTER_BIT_HIDE_IN_EDITOR
+)
