@@ -482,7 +482,6 @@ function gui.WIModelViewer:OnInitialize()
 				nFiles = nFiles - 1
 			end
 		end
-		_x = self.m_model
 		if bit.band(update, 2) ~= 0 then
 			self.m_model:Update()
 		end
