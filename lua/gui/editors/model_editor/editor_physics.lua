@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 local bPclSuccess = engine.load_library("pcl/pr_pcl")
 if bPclSuccess ~= true then
 	console.print("WARNING: An error occured trying to load the 'pr_pcl' module: ", bPclSuccess)

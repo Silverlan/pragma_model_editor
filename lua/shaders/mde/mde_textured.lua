@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 util.register_class("shader.MdeTextured", shader.BasePbr)
 
 shader.MdeTextured.FragmentShader = "programs/mde/textured"

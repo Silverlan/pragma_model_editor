@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 local c = util.register_class("gui.WIModelEditorAnimations", gui.Base, gui.WIModelEditorPanel)
 local MARGIN_OFFSET = 20
 

@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 include("/shaders/mde/mde_skeleton_depth.lua")
 
 util.register_class("gui.WIModelEditorHitboxes", gui.Base, gui.WIModelEditorPanel)

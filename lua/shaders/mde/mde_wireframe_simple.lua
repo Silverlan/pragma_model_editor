@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 util.register_class("shader.MdeWireframeSimple", shader.BaseGraphics)
 
 local SHADER_VERTEX_COLOR_BUFFER_BINDING = 0

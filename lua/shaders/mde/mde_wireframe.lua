@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 util.register_class("shader.MdeWireframe", shader.BaseTexturedLit3D)
 
 shader.MdeWireframe.FragmentShader = "programs/mde/wireframe"

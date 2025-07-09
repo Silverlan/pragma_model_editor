@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 include("/gui/pfm/treeview.lua")
 include("/shaders/mde/mde_vertex_weights.lua")
 

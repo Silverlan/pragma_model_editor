@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 include("/gui/wifileexplorer.lua")
 include("/gui/editors/model_editor/wimodelviewer.lua")
 include("/gui/dialog.lua")

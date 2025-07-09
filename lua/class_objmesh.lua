@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 local VERTEX_EPSILON = 0.001
 
 util.register_class("util.ObjMeshObject")

@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 util.register_class("shader.MdeFlat", shader.BaseGraphics)
 
 local SHADER_UNIFORM_BONE_MATRIX_SET = 0

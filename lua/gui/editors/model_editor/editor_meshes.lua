@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 include("/gui/pfm/treeview.lua")
 
 util.register_class("gui.WIModelEditorMeshes", gui.Base, gui.WIModelEditorPanel)

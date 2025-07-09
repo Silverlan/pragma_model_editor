@@ -1,3 +1,6 @@
+-- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
+-- SPDX-License-Identifier: MIT
+
 include("mde_textured.lua")
 
 util.register_class("shader.MdeVertexWeights", shader.MdeTextured)
