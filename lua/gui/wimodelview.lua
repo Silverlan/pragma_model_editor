@@ -535,11 +535,17 @@ function gui.WIModelView:InitializeViewport(width, height)
 	self:UpdateCallbacks()
 	self:SetCameraMovementEnabled(true)
 end
+function gui.WIModelView:SetRenderWhenInvisible(shouldRender)
+	shouldRender = shouldRender or false
+	self.m_renderWhenInvisible = shouldRender
+	self:SetAlwaysUpdate(shouldRender)
+	self:UpdateCallbacks()
+end
 function gui.WIModelView:OnVisibilityChanged(visible)
 	self:UpdateCallbacks()
 end
 function gui.WIModelView:UpdateCallbacks()
-	if self:IsVisible() == false then
+	if self:IsVisible() == false and self.m_renderWhenInvisible ~= true then
 		util.remove({ self.m_cbRender, self.m_cbPreRender })
 		return
 	end
