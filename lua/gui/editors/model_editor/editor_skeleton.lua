@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
 -- SPDX-License-Identifier: MIT
 
-include("/gui/pfm/treeview.lua")
+include("/gui/pfm/containers/tree_view.lua")
 include("/shaders/mde/mde_vertex_weights.lua")
 
 util.register_class("gui.WIModelEditorSkeleton", gui.Base, gui.WIModelEditorPanel)
@@ -21,7 +21,7 @@ function gui.WIModelEditorSkeleton:OnInitialize()
 	local scrollContainer = gui.create("WIScrollContainer", self)
 	scrollContainer:SetAutoAlignToParent(true)
 
-	local pBones = gui.create("WIPFMTreeView", scrollContainer)
+	local pBones = gui.create("pfm_tree_view", scrollContainer)
 	pBones:SetX(MARGIN_OFFSET)
 	-- pBones:SetScrollable(true)
 	pBones:SetSelectable(gui.Table.SELECTABLE_MODE_SINGLE)
@@ -182,4 +182,4 @@ function gui.WIModelEditorSkeleton:OnSizeChanged(w, h)
 		self.m_pBones:SetWidth(w - 20)
 	end
 end
-gui.register("WIModelEditorSkeleton", gui.WIModelEditorSkeleton)
+gui.register("model_editor_skeleton", gui.WIModelEditorSkeleton)

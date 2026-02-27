@@ -147,4 +147,4 @@ end
 function gui.WIModelEditorPhysics:OnSizeChanged(w, h)
 	gui.Base.OnSizeChanged(self, w, h)
 end
-gui.register("WIModelEditorPhysics", gui.WIModelEditorPhysics)
+gui.register("model_editor_physics", gui.WIModelEditorPhysics)

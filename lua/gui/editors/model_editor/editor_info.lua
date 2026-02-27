@@ -1,8 +1,8 @@
 -- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
 -- SPDX-License-Identifier: MIT
 
-include("/gui/vbox.lua")
-include("/gui/hbox.lua")
+include("/gui/layout/vbox.lua")
+include("/gui/layout/hbox.lua")
 
 util.register_class("gui.WIModelEditorInfo", gui.Base, gui.WIModelEditorPanel)
 
@@ -10,7 +10,7 @@ function gui.WIModelEditorInfo:__init()
 	gui.Base.__init(self)
 end
 function gui.WIModelEditorInfo:AddOption(name, identifier)
-	local optionBox = gui.create("WIHBox", self.m_optionsBox)
+	local optionBox = gui.create("hbox", self.m_optionsBox)
 
 	local pCbOption = gui.create("WICheckbox", optionBox)
 	pCbOption:AddCallback("OnChange", function(pCb, b)
@@ -35,8 +35,8 @@ function gui.WIModelEditorInfo:OnInitialize()
 
 	self:SetSize(600, 300)
 
-	self.m_infoBox = gui.create("WIVBox", self, 20, 24)
-	self.m_optionsBox = gui.create("WIVBox", self, self:GetWidth() - 200, 24)
+	self.m_infoBox = gui.create("vbox", self, 20, 24)
+	self.m_optionsBox = gui.create("vbox", self, self:GetWidth() - 200, 24)
 	self.m_tInfos = {}
 	self.m_tOptions = {}
 
@@ -60,7 +60,7 @@ function gui.WIModelEditorInfo:OnInitialize()
 	pOpt:SetChecked(true)
 
 	-- LOD Level
-	local lodBox = gui.create("WIHBox", self.m_optionsBox)
+	local lodBox = gui.create("hbox", self.m_optionsBox)
 	local lb = gui.create_label(locale.get_text("mde_lod_level"), lodBox)
 	local dm = gui.create("WIDropDownMenu", lodBox)
 	dm:SetSize(140, 20)
@@ -79,7 +79,7 @@ function gui.WIModelEditorInfo:OnInitialize()
 	table.insert(self.m_tOptions, { dm, lb })
 
 	-- Rotate model
-	local rotateBox = gui.create("WIHBox", self.m_optionsBox)
+	local rotateBox = gui.create("hbox", self.m_optionsBox)
 	local te = gui.create("WITextEntry", rotateBox)
 	te:SetSize(140, 20)
 	te:SetText("0 0 0")
@@ -200,4 +200,4 @@ function gui.WIModelEditorInfo:OnSizeChanged(w, h)
 		self.m_optionsBox:SetX(w - self.m_optionsBox:GetWidth() - 20)
 	end
 end
-gui.register("WIModelEditorInfo", gui.WIModelEditorInfo)
+gui.register("model_editor_info", gui.WIModelEditorInfo)

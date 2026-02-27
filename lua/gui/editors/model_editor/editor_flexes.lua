@@ -216,4 +216,4 @@ function gui.WIModelEditorFlexes:SetModel(mdl)
 	end
 	self:UpdateOptions()
 end
-gui.register("WIModelEditorFlexes", gui.WIModelEditorFlexes)
+gui.register("model_editor_flexes", gui.WIModelEditorFlexes)

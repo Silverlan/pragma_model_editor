@@ -271,7 +271,7 @@ function gui.WIModelEditorAnimations:OnInitialize()
 	gui.Base.OnInitialize(self)
 
 	self:SetSize(256, 512)
-	local pTabPanel = gui.create("WITabbedPanel", self, 0, 0, self:GetWidth(), self:GetHeight())
+	local pTabPanel = gui.create("tabbed_panel", self, 0, 0, self:GetWidth(), self:GetHeight())
 	local pTabAnimation = pTabPanel:AddTab(locale.get_text("animation"))
 	local pTabEvents = pTabPanel:AddTab(locale.get_text("events"))
 	local pTabBlendControllers = pTabPanel:AddTab(locale.get_text("mde_blend_controllers"))
@@ -606,4 +606,4 @@ function gui.WIModelEditorAnimations:OnSizeChanged(w, h)
 		y = y + self.m_pSpeedSlider:GetHeight()
 	end
 end
-gui.register("WIModelEditorAnimations", gui.WIModelEditorAnimations)
+gui.register("model_editor_animations", gui.WIModelEditorAnimations)

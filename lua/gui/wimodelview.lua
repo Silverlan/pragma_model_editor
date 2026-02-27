@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
 -- SPDX-License-Identifier: MIT
 
-include("/gui/pfm/cursor_tracker.lua")
+include("/gui/pfm/util/cursor_tracker.lua")
 include("/gui/wiviewport.lua")
 
 util.register_class("gui.WIModelView", gui.Base)
@@ -489,7 +489,7 @@ function gui.WIModelView:InitializeViewport(width, height)
 
 	self.m_scene:InitializeRenderTarget(width, height)
 	self.m_scene:SetWorldEnvironment(gameScene:GetWorldEnvironment())
-	rasterizer:GetRenderTarget():SetDebugName("WIModelView")
+	rasterizer:GetRenderTarget():SetDebugName("model_view")
 	rasterizer:SetPrepassMode(
 		gameScene:GetRenderer():GetEntity():GetComponent(ents.COMPONENT_RASTERIZATION_RENDERER):GetPrepassMode()
 	)
@@ -517,7 +517,7 @@ function gui.WIModelView:InitializeViewport(width, height)
 	self.m_drawSceneInfo.renderFlags = game.RENDER_FLAG_ALL
 	self.m_drawSceneInfo.scene = self.m_scene
 
-	local pBg = gui.create("WIViewport", self)
+	local pBg = gui.create("viewport", self)
 	pBg:SetAutoAlignToParent(true)
 	pBg:SetMovementControlsEnabled(false)
 	self.m_pBg = pBg
@@ -1200,7 +1200,7 @@ function gui.WIModelView:PlayIdleAnimation()
 	end
 end
 function gui.WIModelView.create(width, height, defaultModel, parent)
-	local modelView = gui.create("WIModelView", parent)
+	local modelView = gui.create("model_view", parent)
 	modelView:SetSize(width, height)
 	modelView:InitializeViewport(width, height)
 	modelView:SetFov(math.horizontal_fov_to_vertical_fov(45.0, width, height))
@@ -1214,4 +1214,4 @@ function gui.WIModelView.create(width, height, defaultModel, parent)
 	modelView:ScheduleUpdate()
 	return modelView
 end
-gui.register("WIModelView", gui.WIModelView)
+gui.register("model_view", gui.WIModelView)

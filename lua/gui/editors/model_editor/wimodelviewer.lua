@@ -5,8 +5,8 @@ util.register_class("gui.WIModelViewer", gui.Base)
 
 include("/gui/witabbedpanel.lua")
 include("/gui/wimodelview.lua")
-include("/gui/aspectratio.lua")
-include("/gui/vbox.lua")
+include("/gui/layout/aspect_ratio.lua")
+include("/gui/layout/vbox.lua")
 include("/gui/resizer.lua")
 include("editor_base.lua")
 include("editor_info.lua")
@@ -91,14 +91,14 @@ function gui.WIModelViewer:OnInitialize()
 	self.m_dsColorVertices = util.DataStream()
 	self.m_dsColorVertices:WriteVector4(Color.Red:ToVector4())
 
-	self.m_container = gui.create("WIVBox", self, 0, 0, self:GetWidth(), self:GetHeight(), 0, 0, 1, 1)
+	self.m_container = gui.create("vbox", self, 0, 0, self:GetWidth(), self:GetHeight(), 0, 0, 1, 1)
 	self.m_container:SetAutoFillContents(true)
 
-	local mdlViewContainer = gui.create("WIAspectRatio", self.m_container)
+	local mdlViewContainer = gui.create("aspect_ratio", self.m_container)
 	mdlViewContainer:SetHeight(460)
 	self.m_pBg = mdlViewContainer -- TODO
 
-	local pModelView = gui.create("WIModelView", mdlViewContainer)
+	local pModelView = gui.create("model_view", mdlViewContainer)
 	pModelView:AddCallback("OnSceneRender", function(pModelView, drawCmd)
 		if self:IsValid() == false then
 			return
@@ -123,9 +123,9 @@ function gui.WIModelViewer:OnInitialize()
 	pModelView:SetAutoAlignToParent(true)
 	pModelView:InitializeViewport()
 
-	gui.create("WIResizer", self.m_container)
+	gui.create("resizer", self.m_container)
 
-	local pTabPanel = gui.create("WITabbedPanel", self.m_container)
+	local pTabPanel = gui.create("tabbed_panel", self.m_container)
 	pTabPanel:AddCallback("OnTabSelected", function(pTabbedPanel, pTab, pPanel)
 		if self:IsValid() == false then
 			return
@@ -141,7 +141,7 @@ function gui.WIModelViewer:OnInitialize()
 	end)
 
 	self.m_pTabInfo = pTabPanel:AddTab(locale.get_text("info"))
-	local pInfo = gui.create("WIModelEditorInfo", self.m_pTabInfo)
+	local pInfo = gui.create("model_editor_info", self.m_pTabInfo)
 	self.m_idInfo = self:AddPanel(self.m_pTabInfo, pInfo)
 	pInfo:SetAutoAlignToParent(true)
 	pInfo:AddCallback("OnOptionChanged", function(pInfo, name, pCb, bActivated)
@@ -217,7 +217,7 @@ function gui.WIModelViewer:OnInitialize()
 	end)
 
 	self.m_pTabAnimations = pTabPanel:AddTab(locale.get_text("animations"))
-	local pAnimations = gui.create("WIModelEditorAnimations", self.m_pTabAnimations)
+	local pAnimations = gui.create("model_editor_animations", self.m_pTabAnimations)
 	self.m_idAnimations = self:AddPanel(self.m_pTabAnimations, pAnimations)
 	pAnimations:SetAutoAlignToParent(true)
 	pAnimations:AddCallback("OnAnimationSelected", function(pAnimations, anim)
@@ -228,22 +228,22 @@ function gui.WIModelViewer:OnInitialize()
 	end)
 
 	self.m_pTabSkeleton = pTabPanel:AddTab(locale.get_text("skeleton"))
-	local pSkeleton = gui.create("WIModelEditorSkeleton", self.m_pTabSkeleton)
+	local pSkeleton = gui.create("model_editor_skeleton", self.m_pTabSkeleton)
 	self.m_idSkeleton = self:AddPanel(self.m_pTabSkeleton, pSkeleton)
 	pSkeleton:SetAutoAlignToParent(true)
 
 	self.m_pTabMeshes = pTabPanel:AddTab(locale.get_text("mde_meshes"))
-	local pMeshes = gui.create("WIModelEditorMeshes", self.m_pTabMeshes)
+	local pMeshes = gui.create("model_editor_meshes", self.m_pTabMeshes)
 	self.m_idMeshes = self:AddPanel(self.m_pTabMeshes, pMeshes)
 	pMeshes:SetAutoAlignToParent(true)
 
 	self.m_pTabAttachments = pTabPanel:AddTab(locale.get_text("attachments"))
-	local pAttachments = gui.create("WIModelEditorAttachments", self.m_pTabAttachments)
+	local pAttachments = gui.create("model_editor_attachments", self.m_pTabAttachments)
 	self.m_idAttachments = self:AddPanel(self.m_pTabAttachments, pAttachments)
 	pAttachments:SetAutoAlignToParent(true)
 
 	self.m_pTabBlendControllers = pTabPanel:AddTab(locale.get_text("blendcontrollers"))
-	local pBlendControllers = gui.create("WIModelEditorBlendControllers", self.m_pTabBlendControllers)
+	local pBlendControllers = gui.create("model_editor_blend_controllers", self.m_pTabBlendControllers)
 	self.m_idBlendControllers = self:AddPanel(self.m_pTabBlendControllers, pBlendControllers)
 	pBlendControllers:SetAutoAlignToParent(true)
 	pBlendControllers:AddCallback("OnBlendControllerChanged", function(pBlendControllers, blendController, value)
@@ -262,34 +262,34 @@ function gui.WIModelViewer:OnInitialize()
 	end)
 
 	self.m_pTabBodygroups = pTabPanel:AddTab(locale.get_text("bodygroups"))
-	--local pBodygroups = gui.create("WIModelEditorHitboxes",self.m_pTabBodygroups)
+	--local pBodygroups = gui.create("model_editor_hitboxes",self.m_pTabBodygroups)
 	--self.m_pBodygroups = pBodygroups
 	--pBodygroups:SetEditor(self)
 	--pBodygroups:SetAutoAlignToParent(true)
 
 	self.m_pTabSkins = pTabPanel:AddTab(locale.get_text("skins"))
-	--local pTabSkins = gui.create("WIModelEditorHitboxes",self.m_pTabSkins)
+	--local pTabSkins = gui.create("model_editor_hitboxes",self.m_pTabSkins)
 	--self.m_pTabSkins = pTabSkins
 	--pTabSkins:SetEditor(self)
 	--pTabSkins:SetAutoAlignToParent(true)
 
 	self.m_pTabPhysics = pTabPanel:AddTab(locale.get_text("physics"))
-	local pPhysics = gui.create("WIModelEditorPhysics", self.m_pTabPhysics)
+	local pPhysics = gui.create("model_editor_physics", self.m_pTabPhysics)
 	self.m_idPhysics = self:AddPanel(self.m_pTabPhysics, pPhysics)
 	pPhysics:SetAutoAlignToParent(true)
 
 	self.m_pTabHitboxes = pTabPanel:AddTab(locale.get_text("hitboxes"))
-	local pHitboxes = gui.create("WIModelEditorHitboxes", self.m_pTabHitboxes)
+	local pHitboxes = gui.create("model_editor_hitboxes", self.m_pTabHitboxes)
 	self.m_idHitboxes = self:AddPanel(self.m_pTabHitboxes, pHitboxes)
 	pHitboxes:SetAutoAlignToParent(true)
 
 	self.m_TabFlexes = pTabPanel:AddTab(locale.get_text("flexes"))
-	local pFlexes = gui.create("WIModelEditorFlexes", self.m_TabFlexes)
+	local pFlexes = gui.create("model_editor_flexes", self.m_TabFlexes)
 	self.m_idFlexes = self:AddPanel(self.m_TabFlexes, pFlexes)
 	pFlexes:SetAutoAlignToParent(true)
 
 	self.m_pTabTextures = pTabPanel:AddTab(locale.get_text("textures"))
-	local pTextures = gui.create("WIModelEditorTextures", self.m_pTabTextures)
+	local pTextures = gui.create("model_editor_textures", self.m_pTabTextures)
 	self.m_idTextures = self:AddPanel(self.m_pTabTextures, pTextures)
 	pTextures:SetAutoAlignToParent(true)
 
@@ -778,4 +778,4 @@ function gui.WIModelViewer:OnSizeChanged(w, h)
 		end
 	end
 end
-gui.register("WIModelViewer", gui.WIModelViewer)
+gui.register("model_viewer", gui.WIModelViewer)

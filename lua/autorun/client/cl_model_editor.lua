@@ -18,7 +18,7 @@ end
 tool.open_model_editor = function()
 	include("/gui/editors/model_editor/wimodeleditor.lua")
 	tool.close_model_editor()
-	tool.editor = gui.create("WIModelEditor")
+	tool.editor = gui.create("model_editor")
 	tool.editor:SetAutoAlignToParent(true)
 	-- tool.editor:SetZPos(1000)
 

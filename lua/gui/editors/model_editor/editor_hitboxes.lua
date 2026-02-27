@@ -222,4 +222,4 @@ function gui.WIModelEditorHitboxes:Render(drawCmd, cam)
 		)
 	end
 end
-gui.register("WIModelEditorHitboxes", gui.WIModelEditorHitboxes)
+gui.register("model_editor_hitboxes", gui.WIModelEditorHitboxes)

@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
 -- SPDX-License-Identifier: MIT
 
-include("/gui/pfm/treeview.lua")
+include("/gui/pfm/containers/tree_view.lua")
 
 util.register_class("gui.WIModelEditorMeshes", gui.Base, gui.WIModelEditorPanel)
 local MARGIN_OFFSET = 20
@@ -13,7 +13,7 @@ end
 function gui.WIModelEditorMeshes:OnInitialize()
 	gui.Base.OnInitialize(self)
 
-	local pMeshes = gui.create("WIPFMTreeView", self)
+	local pMeshes = gui.create("pfm_tree_view", self)
 	pMeshes:SetAutoAlignToParent(true)
 	pMeshes:SetX(MARGIN_OFFSET)
 	-- pMeshes:SetScrollable(true)
@@ -173,4 +173,4 @@ end
 function gui.WIModelEditorMeshes:OnSizeChanged(w, h)
 	gui.Base.OnSizeChanged(self, w, h)
 end
-gui.register("WIModelEditorMeshes", gui.WIModelEditorMeshes)
+gui.register("model_editor_meshes", gui.WIModelEditorMeshes)

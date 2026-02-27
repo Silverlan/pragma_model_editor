@@ -213,4 +213,4 @@ function gui.WIModelEditorTextures:OnSizeChanged(w, h)
 		self.m_pTexturePaths:SetSize(w, 128)
 	end
 end
-gui.register("WIModelEditorTextures", gui.WIModelEditorTextures)
+gui.register("model_editor_textures", gui.WIModelEditorTextures)

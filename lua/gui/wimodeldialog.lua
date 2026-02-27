@@ -4,7 +4,7 @@
 include("/gui/wifileexplorer.lua")
 include("/gui/editors/model_editor/wimodelviewer.lua")
 include("/gui/dialog.lua")
-include("/gui/pfm/modelcatalog.lua")
+include("/gui/pfm/catalogs/model_catalog.lua")
 
 util.register_class("gui.WIModelDialog", gui.Base)
 
@@ -31,11 +31,11 @@ function gui.WIModelDialog:OnInitialize()
 
 	local x = 12
 	local y = 60
-	local contents = gui.create("WIHBox", self, x, y, self:GetWidth() - x * 2, self:GetHeight() - y * 2, 0, 0, 1, 1)
+	local contents = gui.create("hbox", self, x, y, self:GetWidth() - x * 2, self:GetHeight() - y * 2, 0, 0, 1, 1)
 	contents:SetAutoFillContents(true)
 	self.m_contents = contents
 
-	local pTabPanel = gui.create("WITabbedPanel", contents)
+	local pTabPanel = gui.create("tabbed_panel", contents)
 	pTabPanel:AddCallback("OnTabSelected", function(pTabbedPanel, pTab, pPanel)
 		--[[if(self:IsValid() == false) then return end
 		self.m_pSelectedTab = pPanel
@@ -52,7 +52,7 @@ function gui.WIModelDialog:OnInitialize()
 	tabMdlExplorer:SetSize(592, 497)
 
 	local mdlCatalog = gui.create(
-		"WIPFMModelCatalog",
+		"pfm_model_catalog",
 		tabMdlExplorer,
 		0,
 		0,
@@ -83,7 +83,7 @@ function gui.WIModelDialog:OnInitialize()
 	end)
 	self.m_pFileList = mdlCatalog
 
-	--[[local t = gui.create("WIFileExplorer",tabMdlExplorer,0,0,tabMdlExplorer:GetWidth(),tabMdlExplorer:GetHeight(),0,0,1,1)
+	--[[local t = gui.create("file_explorer",tabMdlExplorer,0,0,tabMdlExplorer:GetWidth(),tabMdlExplorer:GetHeight(),0,0,1,1)
 	t:SetRootPath("models")
 	t:SetExtensions({"wmd"})
 	t:AddCallback("OnFileClicked",function(p,fName)
@@ -101,12 +101,12 @@ function gui.WIModelDialog:OnInitialize()
 
 	self:InitializeAssetImporter(pTabPanel, tabMdlExplorer)
 
-	local resizer = gui.create("WIResizer", contents)
+	local resizer = gui.create("resizer", contents)
 
-	local mdlViewer = gui.create("WIModelViewer", contents)
+	local mdlViewer = gui.create("model_viewer", contents)
 	self.m_mdlViewer = mdlViewer
 
-	local buttonContainer = gui.create("WIHBox", self)
+	local buttonContainer = gui.create("hbox", self)
 	local btOpen = gui.create("WIButton", buttonContainer)
 	btOpen:SetText(locale.get_text("open"))
 	btOpen:AddCallback("OnPressed", function()
@@ -134,9 +134,9 @@ function gui.WIModelDialog:InitializeAssetImporter(pTabPanel, tabMdlExplorer)
 	local tabAssetImporter = pTabPanel:AddTab(locale.get_text("mde_asset_importer"))
 	tabAssetImporter:SetSize(tabMdlExplorer:GetSize())
 
-	local vbox = gui.create("WIVBox", tabAssetImporter)
+	local vbox = gui.create("vbox", tabAssetImporter)
 	gui.create("WIBase", vbox, 0, 0, 1, 8) -- gap
-	local buttonContainer = gui.create("WIHBox", vbox)
+	local buttonContainer = gui.create("hbox", vbox)
 	local btImport = gui.create("WIButton", buttonContainer)
 	btImport:SetText(locale.get_text("import"))
 	btImport:SizeToContents()
@@ -146,7 +146,7 @@ function gui.WIModelDialog:InitializeAssetImporter(pTabPanel, tabMdlExplorer)
 	vbox:Update()
 
 	local tAssetExplorer = gui.create(
-		"WIFileExplorer",
+		"file_explorer",
 		tabAssetImporter,
 		0,
 		0,
@@ -288,11 +288,11 @@ function gui.WIModelDialog:SetModel(modelName)
 	self.m_modelName = "import"
 	self.m_mdlViewer:SetModel(modelName)
 end
-gui.register("WIModelDialog", gui.WIModelDialog)
+gui.register("model_dialog", gui.WIModelDialog)
 
 gui.open_model_dialog = function(resultHandler)
 	return gui.create_dialog(function()
-		local el = gui.create("WIModelDialog")
+		local el = gui.create("model_dialog")
 		el:SetResultHandler(resultHandler)
 		return el
 	end)

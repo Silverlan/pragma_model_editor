@@ -191,4 +191,4 @@ function gui.WIModelEditorBlendControllers:OnSizeChanged(w, h)
 	end
 	self.m_pButtonReset:SetPos(w - self.m_pButtonReset:GetWidth() - MARGIN_OFFSET, yOffset + MARGIN_OFFSET)
 end
-gui.register("WIModelEditorBlendControllers", gui.WIModelEditorBlendControllers)
+gui.register("model_editor_blend_controllers", gui.WIModelEditorBlendControllers)

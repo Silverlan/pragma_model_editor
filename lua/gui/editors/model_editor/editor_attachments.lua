@@ -238,4 +238,4 @@ function gui.WIModelEditorAttachments:OnSizeChanged(w, h)
 	self.m_pEdit:SetPos(x, y)
 	x = x + self.m_pEdit:GetWidth() + 4
 end
-gui.register("WIModelEditorAttachments", gui.WIModelEditorAttachments)
+gui.register("model_editor_attachments", gui.WIModelEditorAttachments)
