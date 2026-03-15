@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: (c) 2022 Silverlan <opensource@pragma-engine.com>
 -- SPDX-License-Identifier: MIT
 
-util.register_class("gui.WIModelViewer", gui.Base)
+local ModelViewer = util.register_class("gui.ModelViewer", gui.Base)
 
 include("/gui/witabbedpanel.lua")
 include("/gui/wimodelview.lua")
@@ -23,12 +23,12 @@ include("editor_flexes.lua")
 
 locale.load("model_editor.txt")
 
-gui.WIModelViewer.IMPORT_TYPE_MESH = 1
-gui.WIModelViewer.IMPORT_TYPE_PHYSICS = 2
-gui.WIModelViewer.IMPORT_TYPE_ANIMATION = 4
-gui.WIModelViewer.importers = {}
-gui.WIModelViewer.register_importer = function(ext, importTypes, fImport)
-	gui.WIModelViewer.importers[ext:lower()] = { importTypes, fImport }
+ModelViewer.IMPORT_TYPE_MESH = 1
+ModelViewer.IMPORT_TYPE_PHYSICS = 2
+ModelViewer.IMPORT_TYPE_ANIMATION = 4
+ModelViewer.importers = {}
+ModelViewer.register_importer = function(ext, importTypes, fImport)
+	ModelViewer.importers[ext:lower()] = { importTypes, fImport }
 end
 for _, f in ipairs(file.find("lua/" .. get_script_path() .. "/importers/*.lua")) do
 	include("importers/" .. f)
@@ -36,12 +36,12 @@ end
 
 local MARGIN_X_OFFSET = 20
 
-function gui.WIModelViewer:__init()
+function ModelViewer:__init()
 	gui.Base.__init(self)
 
 	include("/shaders/mde")
 end
-function gui.WIModelViewer:OnRemove()
+function ModelViewer:OnRemove()
 	gui.Base.OnRemove(self)
 
 	if util.is_valid(self.m_cbDropped) == true then
@@ -51,28 +51,29 @@ function gui.WIModelViewer:OnRemove()
 		self.m_entLightSource:Remove()
 	end
 end
-function gui.WIModelViewer:AddPanel(pTab, p)
+function ModelViewer:AddPanel(pTab, p)
 	table.insert(self.m_tShowPanel, false)
 	table.insert(self.m_tPanels, p)
 	table.insert(self.m_tTabs, pTab)
 	return #self.m_tPanels
 end
-function gui.WIModelViewer:GetPanel(i)
+function ModelViewer:GetPanel(i)
 	return self.m_tPanels[i]
 end
-function gui.WIModelViewer:LogMessage(msg)
+function ModelViewer:LogMessage(msg)
 	-- TODO
 end
-function gui.WIModelViewer:UpdateShowMeshes()
+function ModelViewer:UpdateShowMeshes()
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	self.m_pModelView:SetShowMeshes(self.m_bShowMeshes)
 end
-function gui.WIModelViewer:OnInitialize()
+function ModelViewer:OnInitialize()
 	gui.Base.OnInitialize(self)
 
 	self:SetSize(1024, 768)
+	self:AddStyleClass("panel")
 
 	self.m_bShowRenderBox = false
 	self.m_bShowCollisionBox = false
@@ -578,10 +579,10 @@ local boxVerts = {
 	endPos,
 	Vector(startPos.x, endPos.y, endPos.z),
 }
-function gui.WIModelViewer:GetBoxVertices()
+function ModelViewer:GetBoxVertices()
 	return boxVerts
 end
-function gui.WIModelViewer:PrepareRendering(pModelView)
+function ModelViewer:PrepareRendering(pModelView)
 	if self.m_bShowWireframe then
 		pModelView:ScheduleEntityForRendering(self.m_shaderWireframe)
 	end
@@ -589,13 +590,13 @@ function gui.WIModelViewer:PrepareRendering(pModelView)
 		pModelView:ScheduleEntityForRendering(self.m_shaderPoints)
 	end
 end
-function gui.WIModelViewer:ScheduleEntityForRendering()
+function ModelViewer:ScheduleEntityForRendering()
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	self.m_pModelView:Render()
 end
-function gui.WIModelViewer:DrawAxis(m)
+function ModelViewer:DrawAxis(m)
 	if util.is_valid(self.m_axisWireframeMesh) == false or util.is_valid(self.m_pModelView) == false then
 		return
 	end
@@ -604,7 +605,7 @@ function gui.WIModelViewer:DrawAxis(m)
 	m = cam:GetProjectionMatrix() * cam:GetViewMatrix() * m
 	self.m_axisWireframeMesh:Draw(rt, m)
 end
-function gui.WIModelViewer:DrawBox(m)
+function ModelViewer:DrawBox(m)
 	if util.is_valid(self.m_boxWireframeMesh) == false or util.is_valid(self.m_pModelView) == false then
 		return
 	end
@@ -613,7 +614,7 @@ function gui.WIModelViewer:DrawBox(m)
 	m = cam:GetProjectionMatrix() * cam:GetViewMatrix() * m
 	self.m_boxWireframeMesh:Draw(rt, m)
 end
-function gui.WIModelViewer:DrawMesh(mesh, m)
+function ModelViewer:DrawMesh(mesh, m)
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
@@ -622,22 +623,22 @@ function gui.WIModelViewer:DrawMesh(mesh, m)
 	m = cam:GetProjectionMatrix() * cam:GetViewMatrix() * m
 	mesh:Draw(rt, m)
 end
-function gui.WIModelViewer:GetModel()
+function ModelViewer:GetModel()
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	return self.m_pModelView:GetModel()
 end
-function gui.WIModelViewer:GetModelName()
+function ModelViewer:GetModelName()
 	return self.m_modelName
 end
-function gui.WIModelViewer:GetEntity()
+function ModelViewer:GetEntity()
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	return self.m_pModelView:GetEntity()
 end
-function gui.WIModelViewer:SetLOD(lod)
+function ModelViewer:SetLOD(lod)
 	self.m_lodMeshes = {}
 	local mdl = self:GetModel()
 	if util.is_valid(mdl) == false then
@@ -645,7 +646,7 @@ function gui.WIModelViewer:SetLOD(lod)
 	end
 	self.m_lodMeshes = mdl:GetBodyGroupMeshes(lod)
 end
-function gui.WIModelViewer:FilterMeshes(ent, mdl, meshGroupId, meshGroup, mesh, subMesh, mat)
+function ModelViewer:FilterMeshes(ent, mdl, meshGroupId, meshGroup, mesh, subMesh, mat)
 	for _, meshLod in ipairs(self.m_lodMeshes) do
 		if meshLod == mesh then
 			return true
@@ -653,7 +654,7 @@ function gui.WIModelViewer:FilterMeshes(ent, mdl, meshGroupId, meshGroup, mesh, 
 	end
 	return true
 end
-function gui.WIModelViewer:RenderWireframe()
+function ModelViewer:RenderWireframe()
 	local shaderWireframe = self.m_shaderWireframeAnimated
 	if shaderWireframe == nil or util.is_valid(self.m_pModelView) == false then
 		return
@@ -665,7 +666,7 @@ function gui.WIModelViewer:RenderWireframe()
 		)
 	end)
 end
-function gui.WIModelViewer:RenderVertices()
+function ModelViewer:RenderVertices()
 	local shaderVertices = self.m_shaderVerticesAnimated
 	if shaderVertices == nil or util.is_valid(self.m_pModelView) == false then
 		return
@@ -677,10 +678,10 @@ function gui.WIModelViewer:RenderVertices()
 		)
 	end)
 end
-function gui.WIModelViewer:GetModelView()
+function ModelViewer:GetModelView()
 	return self.m_pModelView
 end
-function gui.WIModelViewer:OnSceneRender(drawCmd, cam, rt)
+function ModelViewer:OnSceneRender(drawCmd, cam, rt)
 	for _, p in ipairs(self.m_tPanels) do
 		if util.is_valid(p) == true then
 			p:Render(drawCmd, cam, self.m_pModelView)
@@ -718,10 +719,10 @@ function gui.WIModelViewer:OnSceneRender(drawCmd, cam, rt)
 		self:DrawBox(m)
 	end
 end
-function gui.WIModelViewer:Clear()
+function ModelViewer:Clear()
 	self:SetModel()
 end
-function gui.WIModelViewer:SaveModel(mdlName)
+function ModelViewer:SaveModel(mdlName)
 	if util.is_valid(self.m_model) == false then
 		return
 	end
@@ -730,13 +731,13 @@ function gui.WIModelViewer:SaveModel(mdlName)
 	end
 	self.m_model:Save(mdlName)
 end
-function gui.WIModelViewer:UpdateModel()
+function ModelViewer:UpdateModel()
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	self.m_pModelView:UpdateModel()
 end
-function gui.WIModelViewer:SetModel(mdlName)
+function ModelViewer:SetModel(mdlName)
 	local mdl
 	if mdlName ~= nil then
 		if type(mdlName) == "string" then
@@ -763,13 +764,13 @@ function gui.WIModelViewer:SetModel(mdlName)
 	end
 	self:SetLOD(0)
 end
-function gui.WIModelViewer:PlayAnimation(anim)
+function ModelViewer:PlayAnimation(anim)
 	if util.is_valid(self.m_pModelView) == false then
 		return
 	end
 	self.m_pModelView:PlayAnimation(anim)
 end
-function gui.WIModelViewer:OnSizeChanged(w, h)
+function ModelViewer:OnSizeChanged(w, h)
 	gui.Base.OnSizeChanged(self, w, h)
 	if util.is_valid(self.m_pTabSkeleton) == true then
 		local pBones = self.m_pTabSkeleton.m_pBones
@@ -778,4 +779,4 @@ function gui.WIModelViewer:OnSizeChanged(w, h)
 		end
 	end
 end
-gui.register("model_viewer", gui.WIModelViewer)
+gui.register("model_viewer", ModelViewer)

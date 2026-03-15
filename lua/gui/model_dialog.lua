@@ -6,12 +6,8 @@ include("/gui/editors/model_editor/wimodelviewer.lua")
 include("/gui/dialog.lua")
 include("/gui/pfm/catalogs/model_catalog.lua")
 
-util.register_class("gui.WIModelDialog", gui.Base)
-
-function gui.WIModelDialog:__init()
-	gui.Base.__init(self)
-end
-function gui.WIModelDialog:OnInitialize()
+local ModelDialog = util.register_class("gui.ModelDialog", gui.Base)
+function ModelDialog:OnInitialize()
 	gui.Base.OnInitialize(self)
 
 	self:SetSize(1210, 781)
@@ -21,6 +17,7 @@ function gui.WIModelDialog:OnInitialize()
 
 	local titleBar = gui.create("WIRect", self, 0, 0, self:GetWidth(), 31, 0, 0, 1, 0)
 	titleBar:SetColor(Color.White)
+	titleBar:AddStyleClass("title_bar")
 
 	local title = gui.create("WIText", titleBar)
 	title:SetColor(Color.Black)
@@ -35,34 +32,7 @@ function gui.WIModelDialog:OnInitialize()
 	contents:SetAutoFillContents(true)
 	self.m_contents = contents
 
-	local pTabPanel = gui.create("tabbed_panel", contents)
-	pTabPanel:AddCallback("OnTabSelected", function(pTabbedPanel, pTab, pPanel)
-		--[[if(self:IsValid() == false) then return end
-		self.m_pSelectedTab = pPanel
-		for idx,pOther in ipairs(self.m_tPanels) do
-			if(util.is_valid(pOther) == true) then
-				local b = (pPanel == pOther:GetParent()) and true or false
-				pOther:SetShowItems(b or self.m_tShowPanel[idx])
-				pOther:SetSelected(b)
-			end
-		end]]
-	end)
-
-	local tabMdlExplorer = pTabPanel:AddTab(locale.get_text("mde_model_explorer"))
-	tabMdlExplorer:SetSize(592, 497)
-
-	local mdlCatalog = gui.create(
-		"pfm_model_catalog",
-		tabMdlExplorer,
-		0,
-		0,
-		tabMdlExplorer:GetWidth(),
-		tabMdlExplorer:GetHeight(),
-		0,
-		0,
-		1,
-		1
-	)
+	local mdlCatalog = gui.create("pfm_model_catalog", contents)
 	local explorer = mdlCatalog:GetExplorer()
 	explorer:AddCallback("OnIconAdded", function(explorer, icon)
 		if icon:IsDirectory() == false then
@@ -82,24 +52,6 @@ function gui.WIModelDialog:OnInitialize()
 		end
 	end)
 	self.m_pFileList = mdlCatalog
-
-	--[[local t = gui.create("file_explorer",tabMdlExplorer,0,0,tabMdlExplorer:GetWidth(),tabMdlExplorer:GetHeight(),0,0,1,1)
-	t:SetRootPath("models")
-	t:SetExtensions({"wmd"})
-	t:AddCallback("OnFileClicked",function(p,fName)
-		if(util.is_valid(self) == false or util.is_valid(self.m_mdlViewer) == false) then return end
-		local path = t:GetAbsolutePath() .. fName
-		path = file.remove_file_extension(path:sub(8))
-		self:SetModel(path)
-	end)
-	t:AddCallback("OnFileSelected",function(p,fPath)
-		self:CallCallbacks("OnFileSelected",self:GetModelName())
-		self:Close(gui.DIALOG_RESULT_OK)
-	end)
-	t:Update()
-	self.m_pFileList = t]]
-
-	self:InitializeAssetImporter(pTabPanel, tabMdlExplorer)
 
 	local resizer = gui.create("resizer", contents)
 
@@ -130,47 +82,7 @@ function gui.WIModelDialog:OnInitialize()
 
 	resizer:SetFraction(0.45)
 end
-function gui.WIModelDialog:InitializeAssetImporter(pTabPanel, tabMdlExplorer)
-	local tabAssetImporter = pTabPanel:AddTab(locale.get_text("mde_asset_importer"))
-	tabAssetImporter:SetSize(tabMdlExplorer:GetSize())
-
-	local vbox = gui.create("vbox", tabAssetImporter)
-	gui.create("WIBase", vbox, 0, 0, 1, 8) -- gap
-	local buttonContainer = gui.create("hbox", vbox)
-	local btImport = gui.create("WIButton", buttonContainer)
-	btImport:SetText(locale.get_text("import"))
-	btImport:SizeToContents()
-	gui.create("WIBase", buttonContainer, 0, 0, 8, 1) -- gap
-	buttonContainer:Update()
-	gui.create("WIBase", vbox, 0, 0, 1, 8) -- gap
-	vbox:Update()
-
-	local tAssetExplorer = gui.create(
-		"file_explorer",
-		tabAssetImporter,
-		0,
-		0,
-		tabAssetImporter:GetWidth(),
-		tabAssetImporter:GetHeight() - vbox:GetHeight(),
-		0,
-		0,
-		1,
-		1
-	)
-	tAssetExplorer:SetRootPath("")
-	tAssetExplorer:SetExtensions({ "fbx", "pmx" })
-	tAssetExplorer:Update()
-	self.m_pAssetExplorer = tAssetExplorer
-
-	btImport:AddCallback("OnPressed", function()
-		local fileName = tAssetExplorer:GetSelectedFile()
-		self:ImportModel(fileName)
-	end)
-
-	vbox:SetPos(tabAssetImporter:GetWidth() - vbox:GetWidth(), tAssetExplorer:GetBottom())
-	vbox:SetAnchor(1, 1, 1, 1)
-end
-function gui.WIModelDialog:ImportModel(fileName)
+function ModelDialog:ImportModel(fileName)
 	local f = file.open(fileName, bit.bor(file.OPEN_MODE_READ, file.OPEN_MODE_BINARY))
 	if f == nil then
 		return
@@ -257,7 +169,7 @@ function gui.WIModelDialog:ImportModel(fileName)
 	mdl:Update(game.Model.FUPDATE_ALL)
 	self:SetModel(mdl)
 end
-function gui.WIModelDialog:Close(result)
+function ModelDialog:Close(result)
 	gui.close_dialog()
 	if self.m_fResultHandler == nil then
 		return
@@ -273,13 +185,13 @@ function gui.WIModelDialog:Close(result)
 	end
 	self.m_fResultHandler(result)
 end
-function gui.WIModelDialog:SetResultHandler(fResultHandler)
+function ModelDialog:SetResultHandler(fResultHandler)
 	self.m_fResultHandler = fResultHandler
 end
-function gui.WIModelDialog:GetModelName()
+function ModelDialog:GetModelName()
 	return self.m_modelName
 end
-function gui.WIModelDialog:SetModel(modelName)
+function ModelDialog:SetModel(modelName)
 	if type(modelName) == "string" then
 		self.m_modelName = modelName
 		self.m_mdlViewer:SetModel(modelName)
@@ -288,12 +200,12 @@ function gui.WIModelDialog:SetModel(modelName)
 	self.m_modelName = "import"
 	self.m_mdlViewer:SetModel(modelName)
 end
-gui.register("model_dialog", gui.WIModelDialog)
+gui.register("model_dialog", ModelDialog)
 
-gui.open_model_dialog = function(resultHandler)
+gui.open_model_dialog = function(resultHandler, parent)
 	return gui.create_dialog(function()
 		local el = gui.create("model_dialog")
 		el:SetResultHandler(resultHandler)
 		return el
-	end)
+	end, parent)
 end

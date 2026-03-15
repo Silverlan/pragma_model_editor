@@ -2,9 +2,9 @@
 -- SPDX-License-Identifier: MIT
 
 include("/class_objmesh.lua")
-gui.WIModelViewer.register_importer(
+gui.ModelViewer.register_importer(
 	"obj",
-	gui.WIModelViewer.IMPORT_TYPE_MESH,
+	gui.ModelViewer.IMPORT_TYPE_MESH,
 	function(pEditor, mdl, mdlName, fOpen, importType, tFiles)
 		local f = fOpen(false)
 		if f == nil then
