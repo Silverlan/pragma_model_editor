@@ -19,7 +19,6 @@ function gui.WIModelEditorTextures:OnInitialize()
 
 	local pLbMatPaths = gui.create("WIText")
 	pLbMatPaths:SetText(locale.get_text("mde_material_paths") .. ":")
-	pLbMatPaths:SizeToContents()
 	pContainer:AddItem(pLbMatPaths, 0, 0)
 
 	local pPaths = gui.create("WITable")
@@ -37,7 +36,6 @@ function gui.WIModelEditorTextures:OnInitialize()
 
 	local pLbTextures = gui.create("WIText")
 	pLbTextures:SetText(locale.get_text("textures") .. ":")
-	pLbTextures:SizeToContents()
 	pContainer:AddItem(pLbTextures, 2, 0)
 
 	local pTextures = gui.create("WITable")

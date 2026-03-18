@@ -283,7 +283,6 @@ function gui.WIModelEditorAnimations:OnInitialize()
 
 	local pLabelFrame = gui.create("WIText", self)
 	pLabelFrame:SetText(locale.get_text("frame") .. ":")
-	pLabelFrame:SizeToContents()
 	self.m_pLabelFrame = pLabelFrame
 
 	local pFrameSlider = gui.create("WISlider", self)
@@ -307,7 +306,6 @@ function gui.WIModelEditorAnimations:OnInitialize()
 
 	local pLabelSpeed = gui.create("WIText", self)
 	pLabelSpeed:SetText(locale.get_text("speed") .. ":")
-	pLabelSpeed:SizeToContents()
 	self.m_pLabelSpeed = pLabelSpeed
 
 	local pSpeedSlider = gui.create("WISlider", self)
@@ -492,7 +490,6 @@ function gui.WIModelEditorAnimations:AddFlag(name, fc, tooltip)
 	end
 	local pLb = gui.create("WIText")
 	pLb:SetText(name)
-	pLb:SizeToContents()
 	local i = self.m_pAnimGridPanel:GetRowCount()
 
 	local pCbOption = gui.create("WICheckbox")

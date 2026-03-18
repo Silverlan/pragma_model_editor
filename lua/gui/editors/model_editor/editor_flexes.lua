@@ -132,7 +132,6 @@ end
 --[[function gui.WIModelEditorFlexes:AddFlex(name)
 	local pLb = gui.create("WIText",self)
 	pLb:SetText(name)
-	pLb:SizeToContents()
 	
 	local pSlider = gui.create("WISlider",self)
 	pSlider:SetSize(256,16)

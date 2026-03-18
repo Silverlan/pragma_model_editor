@@ -28,12 +28,10 @@ function gui.WIModelEditorBlendControllers:OnInitialize()
 
 	local pLbActiveController = gui.create("WIText", self)
 	pLbActiveController:SetText(locale.get_text("active_blend_controller") .. ":")
-	pLbActiveController:SizeToContents()
 	self.m_pLbActiveController = pLbActiveController
 
 	local pLbCurrentValue = gui.create("WIText", self)
 	pLbCurrentValue:SetText(locale.get_text("current_value") .. ": ")
-	pLbCurrentValue:SizeToContents()
 	self.m_pLbCurrentValue = pLbCurrentValue
 
 	local pSlider = gui.create("WISlider", self)
@@ -123,7 +121,6 @@ function gui.WIModelEditorBlendControllers:SetActiveBlendController(bc)
 					self.m_pLbActiveController:SetText(
 						locale.get_text("active_blend_controller") .. ": " .. blendController.name
 					)
-					self.m_pLbActiveController:SizeToContents()
 				end
 				return
 			end

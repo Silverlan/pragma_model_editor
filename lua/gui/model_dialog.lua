@@ -22,8 +22,7 @@ function ModelDialog:OnInitialize()
 	local title = gui.create("WIText", titleBar)
 	title:SetColor(Color.Black)
 	title:SetText(locale.get_text("mde_select_model"))
-	title:SizeToContents()
-	title:CenterToParentY()
+	title:SetAutoCenterToParentY(true)
 	title:SetX(10)
 
 	local x = 12

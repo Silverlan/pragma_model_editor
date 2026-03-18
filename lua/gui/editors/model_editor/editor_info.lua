@@ -25,7 +25,6 @@ function gui.WIModelEditorInfo:AddOption(name, identifier)
 
 	local pLb = gui.create("WIText", optionBox)
 	pLb:SetText(name)
-	pLb:SizeToContents()
 
 	table.insert(self.m_tOptions, { pLb, pCbOption })
 	return pCbOption

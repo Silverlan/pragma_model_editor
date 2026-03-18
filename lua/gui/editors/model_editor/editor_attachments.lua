@@ -27,7 +27,6 @@ function gui.WIModelEditorAttachments:OnInitialize()
 
 	local lbName = gui.create("WIText", self)
 	lbName:SetText(locale.get_text("name") .. ":")
-	lbName:SizeToContents()
 	self.m_lbName = lbName
 
 	local teName = gui.create("WITextEntry", self)
@@ -36,7 +35,6 @@ function gui.WIModelEditorAttachments:OnInitialize()
 
 	local lbBone = gui.create("WIText", self)
 	lbBone:SetText(locale.get_text("bone") .. ":")
-	lbBone:SizeToContents()
 	self.m_lbBone = lbBone
 
 	local teBone = gui.create("WITextEntry", self)
@@ -45,7 +43,6 @@ function gui.WIModelEditorAttachments:OnInitialize()
 
 	local lbOffset = gui.create("WIText", self)
 	lbOffset:SetText(locale.get_text("offset") .. ":")
-	lbOffset:SizeToContents()
 	self.m_lbOffset = lbOffset
 
 	local teOffset = gui.create("WITextEntry", self)
@@ -54,7 +51,6 @@ function gui.WIModelEditorAttachments:OnInitialize()
 
 	local lbAngles = gui.create("WIText", self)
 	lbAngles:SetText(locale.get_text("angles") .. ":")
-	lbAngles:SizeToContents()
 	self.m_lbAngles = lbAngles
 
 	local teAngles = gui.create("WITextEntry", self)
