@@ -179,7 +179,7 @@ end
 function gui.WIModelEditorSkeleton:OnSizeChanged(w, h)
 	gui.Base.OnSizeChanged(self, w, h)
 	if util.is_valid(self.m_pBones) then
-		self.m_pBones:SetWidth(w - 20)
+		self.m_pBones:ApplyWidth(w - 20)
 	end
 end
 gui.register("model_editor_skeleton", gui.WIModelEditorSkeleton)

@@ -575,31 +575,31 @@ function gui.WIModelEditorAnimations:OnSizeChanged(w, h)
 	local x = MARGIN_OFFSET
 	local y = self.m_pAnimations:GetHeight() + MARGIN_OFFSET
 	for _, p in ipairs({ self.m_pAnimGridPanel, self.m_pEventContainer, self.m_pBlendControllerContainer }) do
-		p:SetPos(MARGIN_OFFSET, y)
+		p:ApplyPos(MARGIN_OFFSET, y)
 		p:SizeToContents()
-		p:SetWidth(600)
+		p:ApplyWidth(600)
 	end
 	if util.is_valid(self.m_pTabPanel) == false then
 		return
 	end
-	self.m_pTabPanel:SetSize(w, h - 80)
+	self.m_pTabPanel:ApplySize(w, h - 80)
 	y = self.m_pTabPanel:GetHeight() + MARGIN_OFFSET
 	if util.is_valid(self.m_pFrameSlider) == true then
 		local x = MARGIN_OFFSET
 		if util.is_valid(self.m_pLabelFrame) == true then
-			self.m_pLabelFrame:SetPos(x, y)
+			self.m_pLabelFrame:ApplyPos(x, y)
 			x = self.m_pLabelFrame:GetX() + self.m_pLabelFrame:GetWidth() + MARGIN_OFFSET * 0.5
 		end
-		self.m_pFrameSlider:SetPos(x, y)
+		self.m_pFrameSlider:ApplyPos(x, y)
 		y = y + self.m_pFrameSlider:GetHeight()
 	end
 	if util.is_valid(self.m_pSpeedSlider) == true then
 		local x = MARGIN_OFFSET
 		if util.is_valid(self.m_pLabelSpeed) == true then
-			self.m_pLabelSpeed:SetPos(x, y)
+			self.m_pLabelSpeed:ApplyPos(x, y)
 			x = self.m_pLabelSpeed:GetX() + self.m_pLabelSpeed:GetWidth() + MARGIN_OFFSET * 0.5
 		end
-		self.m_pSpeedSlider:SetPos(x, y)
+		self.m_pSpeedSlider:ApplyPos(x, y)
 		y = y + self.m_pSpeedSlider:GetHeight()
 	end
 end

@@ -205,10 +205,10 @@ end
 function gui.WIModelEditorTextures:OnSizeChanged(w, h)
 	gui.Base.OnSizeChanged(self, w, h)
 	if util.is_valid(self.m_pTextures) == true then
-		self.m_pTextures:SetSize(w, 128)
+		self.m_pTextures:ApplySize(w, 128)
 	end
 	if util.is_valid(self.m_pTexturePaths) == true then
-		self.m_pTexturePaths:SetSize(w, 128)
+		self.m_pTexturePaths:ApplySize(w, 128)
 	end
 end
 gui.register("model_editor_textures", gui.WIModelEditorTextures)

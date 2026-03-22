@@ -165,12 +165,12 @@ function gui.WIModelEditorFlexes:UpdateOptions()
 	local x = 15
 	local height = self:GetHeight()
 	if util.is_valid(self.m_pFlexControllers) == true then
-		self.m_pFlexControllers:SetHeight(height * 0.4)
+		self.m_pFlexControllers:ApplyHeight(height * 0.4)
 	end
 	if util.is_valid(self.m_pFlexes) == true then
-		self.m_pFlexes:SetHeight(height * 0.4)
+		self.m_pFlexes:ApplyHeight(height * 0.4)
 		if util.is_valid(self.m_pFlexControllers) == true then
-			self.m_pFlexes:SetY(self.m_pFlexControllers:GetBottom() + 10)
+			self.m_pFlexes:ApplyY(self.m_pFlexControllers:GetBottom() + 10)
 		end
 	end
 	local yStart = MARGIN_OFFSET
@@ -186,8 +186,8 @@ function gui.WIModelEditorFlexes:UpdateOptions()
 				y = yStart
 				yNew = y + t[1]:GetHeight()
 			end
-			t[1]:SetPos(x, y)
-			t[2]:SetPos(t[1]:GetX(), yNew)
+			t[1]:ApplyPos(x, y)
+			t[2]:ApplyPos(t[1]:GetX(), yNew)
 			y = t[2]:GetY() + t[2]:GetHeight()
 		end
 	end

@@ -196,7 +196,7 @@ function gui.WIModelEditorInfo:SetModel(mdl)
 end
 function gui.WIModelEditorInfo:OnSizeChanged(w, h)
 	if util.is_valid(self.m_optionsBox) then
-		self.m_optionsBox:SetX(w - self.m_optionsBox:GetWidth() - 20)
+		self.m_optionsBox:ApplyX(w - self.m_optionsBox:GetWidth() - 20)
 	end
 end
 gui.register("model_editor_info", gui.WIModelEditorInfo)

@@ -203,35 +203,35 @@ function gui.WIModelEditorAttachments:OnSizeChanged(w, h)
 	local x = MARGIN_OFFSET
 	local y = yOffset + MARGIN_OFFSET
 
-	self.m_lbName:SetPos(x, y)
+	self.m_lbName:ApplyPos(x, y)
 	x = x + self.m_lbName:GetWidth() + 2
-	self.m_teName:SetPos(x, y)
+	self.m_teName:ApplyPos(x, y)
 	x = x + self.m_teName:GetWidth() + MARGIN_OFFSET
 
-	self.m_lbBone:SetPos(x, y)
+	self.m_lbBone:ApplyPos(x, y)
 	x = x + self.m_lbBone:GetWidth() + 2
-	self.m_teBone:SetPos(x, y)
+	self.m_teBone:ApplyPos(x, y)
 	x = x + self.m_teBone:GetWidth() + MARGIN_OFFSET
 
-	self.m_lbOffset:SetPos(x, y)
+	self.m_lbOffset:ApplyPos(x, y)
 	x = x + self.m_lbOffset:GetWidth() + 2
-	self.m_teOffset:SetPos(x, y)
+	self.m_teOffset:ApplyPos(x, y)
 	x = x + self.m_teOffset:GetWidth() + MARGIN_OFFSET
 
-	self.m_lbAngles:SetPos(x, y)
+	self.m_lbAngles:ApplyPos(x, y)
 	x = x + self.m_lbAngles:GetWidth() + 2
-	self.m_teAngles:SetPos(x, y)
+	self.m_teAngles:ApplyPos(x, y)
 	x = x + self.m_teAngles:GetWidth() + MARGIN_OFFSET
 
 	y = y + self.m_lbName:GetHeight() + MARGIN_OFFSET
 	x = MARGIN_OFFSET
-	self.m_pButtonAdd:SetPos(x, y)
+	self.m_pButtonAdd:ApplyPos(x, y)
 	x = x + self.m_pButtonAdd:GetWidth() + 4
 
-	self.m_pRemove:SetPos(x, y)
+	self.m_pRemove:ApplyPos(x, y)
 	x = x + self.m_pRemove:GetWidth() + 4
 
-	self.m_pEdit:SetPos(x, y)
+	self.m_pEdit:ApplyPos(x, y)
 	x = x + self.m_pEdit:GetWidth() + 4
 end
 gui.register("model_editor_attachments", gui.WIModelEditorAttachments)

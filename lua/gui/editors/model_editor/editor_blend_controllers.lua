@@ -173,19 +173,19 @@ function gui.WIModelEditorBlendControllers:OnSizeChanged(w, h)
 	local x = MARGIN_OFFSET
 	local y = yOffset
 	if util.is_valid(self.m_pLbActiveController) == true then
-		self.m_pLbActiveController:SetPos(MARGIN_OFFSET, y + MARGIN_OFFSET)
+		self.m_pLbActiveController:ApplyPos(MARGIN_OFFSET, y + MARGIN_OFFSET)
 		y = self.m_pLbActiveController:GetY() + self.m_pLbActiveController:GetHeight()
 	end
 	if util.is_valid(self.m_pLbCurrentValue) == true then
-		self.m_pLbCurrentValue:SetPos(MARGIN_OFFSET, y)
+		self.m_pLbCurrentValue:ApplyPos(MARGIN_OFFSET, y)
 		x = self.m_pLbCurrentValue:GetX() + self.m_pLbCurrentValue:GetWidth()
 	end
 	if util.is_valid(self.m_pSlider) == true then
-		self.m_pSlider:SetPos(x, y)
+		self.m_pSlider:ApplyPos(x, y)
 	end
 	if util.is_valid(self.m_pButtonReset) == false then
 		return
 	end
-	self.m_pButtonReset:SetPos(w - self.m_pButtonReset:GetWidth() - MARGIN_OFFSET, yOffset + MARGIN_OFFSET)
+	self.m_pButtonReset:ApplyPos(w - self.m_pButtonReset:GetWidth() - MARGIN_OFFSET, yOffset + MARGIN_OFFSET)
 end
 gui.register("model_editor_blend_controllers", gui.WIModelEditorBlendControllers)

@@ -775,7 +775,7 @@ function ModelViewer:OnSizeChanged(w, h)
 	if util.is_valid(self.m_pTabSkeleton) == true then
 		local pBones = self.m_pTabSkeleton.m_pBones
 		if util.is_valid(pBones) == true then
-			pBones:SetSize(w - pBones:GetX(), h)
+			pBones:ApplySize(w - pBones:GetX(), h)
 		end
 	end
 end
