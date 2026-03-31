@@ -121,6 +121,7 @@ function gui.WIModelEditorPhysics:SetModel(mdl)
 			bufCreateInfo.size = dsFlatVerts:GetSize()
 			bufCreateInfo.usageFlags = prosper.BUFFER_USAGE_VERTEX_BUFFER_BIT
 			bufCreateInfo.memoryFeatures = prosper.MEMORY_FEATURE_GPU_BULK_BIT
+			bufFlatVerts.debugName = "mdlviewer_physics_flat_verts"
 
 			local bufFlatVerts = prosper.create_buffer(bufCreateInfo, dsFlatVerts)
 			if bufFlatVerts == nil then
@@ -128,12 +129,14 @@ function gui.WIModelEditorPhysics:SetModel(mdl)
 			end
 			bufFlatVerts:SetDebugName("mdlviewer_physics_flat_verts")
 			bufCreateInfo.size = dsWireframeVerts:GetSize()
+			bufFlatVerts.debugName = "mdlviewer_physics_wireframe_verts"
 			local bufWireframeVerts = prosper.create_buffer(bufCreateInfo, dsWireframeVerts)
 			if bufWireframeVerts == nil then
 				return
 			end
 			bufWireframeVerts:SetDebugName("mdlviewer_physics_wireframe_verts")
 			bufCreateInfo.size = dsFlatIndices:GetSize()
+			bufFlatVerts.debugName = "mdlviewer_physics_bone_indices"
 			local bufFlatBoneIndices = prosper.create_buffer(bufCreateInfo, dsFlatIndices)
 			if bufFlatBoneIndices == nil then
 				return

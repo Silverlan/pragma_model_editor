@@ -147,6 +147,7 @@ function gui.WIModelEditorHitboxes:SetModel(mdl)
 	bufCreateInfo.size = dsVerts:GetSize()
 	bufCreateInfo.usageFlags = prosper.BUFFER_USAGE_VERTEX_BUFFER_BIT
 	bufCreateInfo.memoryFeatures = prosper.MEMORY_FEATURE_GPU_BULK_BIT
+	bufCreateInfo.debugName = "mdlviewer_hitbox_verts"
 
 	local bufVerts = prosper.create_buffer(bufCreateInfo, dsVerts)
 	if bufVerts == nil then
@@ -154,6 +155,7 @@ function gui.WIModelEditorHitboxes:SetModel(mdl)
 	end
 	bufVerts:SetDebugName("mdlviewer_hitbox_verts")
 	bufCreateInfo.size = dsIndices:GetSize()
+	bufCreateInfo.debugName = "mdlviewer_hitbox_indices"
 	local bufBoneIndices = prosper.create_buffer(bufCreateInfo, dsIndices)
 	if bufBoneIndices == nil then
 		return
@@ -164,12 +166,14 @@ function gui.WIModelEditorHitboxes:SetModel(mdl)
 	self.m_bufHitboxBoneIndices = bufBoneIndices
 
 	bufCreateInfo.size = dsFlatVerts:GetSize()
+	bufCreateInfo.debugName = "mdlviewer_hitbox_flat_verts"
 	local bufFlatVerts = prosper.create_buffer(bufCreateInfo, dsFlatVerts)
 	if bufFlatVerts == nil then
 		return
 	end
 	bufFlatVerts:SetDebugName("mdlviewer_hitbox_flat_verts")
 	bufCreateInfo.size = dsFlatIndices:GetSize()
+	bufCreateInfo.debugName = "mdlviewer_hitbox_flat_indices"
 	local bufFlatBoneIndices = prosper.create_buffer(bufCreateInfo, dsFlatIndices)
 	if bufFlatBoneIndices == nil then
 		return

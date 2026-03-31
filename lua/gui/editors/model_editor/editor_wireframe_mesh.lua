@@ -22,6 +22,7 @@ function WIModelEditorWireframeMesh:__init(verts, colors)
 	bufCreateInfo.size = dsVerts:GetSize()
 	bufCreateInfo.usageFlags = prosper.BUFFER_USAGE_VERTEX_BUFFER_BIT
 	bufCreateInfo.memoryFeatures = prosper.MEMORY_FEATURE_GPU_BULK_BIT
+	bufCreateInfo.debugName = "mdlviewer_wireframe_mesh_verts"
 	local bufVert = prosper.create_buffer(bufCreateInfo, dsVerts)
 	if bufVert == nil then
 		return

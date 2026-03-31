@@ -91,11 +91,13 @@ function shader.MdeFlat:CreateBuffers(ent, color)
 	bufCreateInfo.size = dsVerts:GetSize()
 	bufCreateInfo.usageFlags = prosper.BUFFER_USAGE_VERTEX_BUFFER_BIT
 	bufCreateInfo.memoryFeatures = prosper.MEMORY_FEATURE_GPU_BULK_BIT
+	bufCreateInfo.debugName = "mdlviewer_shader_flat_verts"
 	local bufVerts = prosper.create_buffer(bufCreateInfo, dsVerts)
 	if bufVerts == nil then
 		return
 	end
 	bufVerts:SetDebugName("mdlviewer_shader_flat_verts")
+	bufCreateInfo.debugName = "mdlviewer_shader_flat_indices"
 	local bufIndices = prosper.create_buffer(bufCreateInfo, dsIndices)
 	if bufIndices == nil then
 		return
