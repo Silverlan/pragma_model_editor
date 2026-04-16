@@ -16,7 +16,7 @@ function gui.WIModelEditorHitboxes:OnInitialize()
 
 	self.m_tHitboxOffset = { {}, {} }
 	self.m_shader = shader.get("mde_skeleton_depth")
-	self.m_shaderFlat = shader.get("mde_flat")
+	self.m_shaderFlat = nil -- shader.get("mde_flat")
 
 	local pHitboxes = gui.create("WITable", self)
 	pHitboxes:SetAutoAlignToParent(true)
@@ -214,7 +214,7 @@ function gui.WIModelEditorHitboxes:Render(drawCmd, cam)
 			offsetOutline
 		)
 	end
-	if util.is_valid(self.m_bufFlatVerts) == true then
+	if util.is_valid(self.m_bufFlatVerts) == true and self.m_shaderFlat ~= nil then
 		self.m_shaderFlat:Draw(
 			drawCmd,
 			ent,

@@ -31,15 +31,19 @@ function gui.WIModelEditorPhysics:OnInitialize()
 	pHeader:SetValue(5, locale.get_text("vertex_count"))
 	self.m_pPhysics = pPhysics
 
-	self.m_shaderFlat = shader.get("mde_flat")
-	self.m_shaderFlatWireframe = shader.get("mde_flat_wireframe")
+	self.m_shaderFlat = nil -- shader.get("mde_flat")
+	self.m_shaderFlatWireframe = nil -- shader.get("mde_flat_wireframe")
 end
 function gui.WIModelEditorPhysics:Render(drawCmd, cam)
 	local ent = self:GetEntity()
 	local function draw(o)
 		if util.is_valid(o[1]) == true then
-			self.m_shaderFlat:Draw(drawCmd, ent, o[1], o[3], cam:GetProjectionMatrix() * cam:GetViewMatrix())
-			self.m_shaderFlatWireframe:Draw(drawCmd, ent, o[2], o[3], cam:GetProjectionMatrix() * cam:GetViewMatrix())
+			if(self.m_shaderFlat ~= nil) then
+				self.m_shaderFlat:Draw(drawCmd, ent, o[1], o[3], cam:GetProjectionMatrix() * cam:GetViewMatrix())
+			end
+			if(self.m_shaderFlatWireframe ~= nil) then
+				self.m_shaderFlatWireframe:Draw(drawCmd, ent, o[2], o[3], cam:GetProjectionMatrix() * cam:GetViewMatrix())
+			end
 		end
 	end
 	if self:IsSelected() and self.m_selected ~= nil then

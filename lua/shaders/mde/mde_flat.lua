@@ -14,9 +14,9 @@ function shader.MdeFlat:__init()
 	self.m_dsMVP = util.DataStream(util.SIZEOF_MAT4)
 end
 function shader.MdeFlat:OnInitialized()
-	local boneBuffer, instanceSize = ents.get_instance_bone_buffer()
-	self.m_descSetBone = self:GetShader():CreateDescriptorSet(SHADER_UNIFORM_BONE_MATRIX_SET)
-	self.m_descSetBone:SetBindingUniformBufferDynamic(SHADER_UNIFORM_BONE_MATRIX_BINDING, boneBuffer, 0, instanceSize)
+	--local boneBuffer, instanceSize = ents.get_instance_bone_buffer()
+	--self.m_descSetBone = self:GetShader():CreateDescriptorSet(SHADER_UNIFORM_BONE_MATRIX_SET)
+	--self.m_descSetBone:SetBindingUniformBufferDynamic(SHADER_UNIFORM_BONE_MATRIX_BINDING, boneBuffer, 0, instanceSize)
 end
 function shader.MdeFlat:InitializeRenderPass(pipelineIdx)
 	return { shader.Scene3D.get_render_pass() }
