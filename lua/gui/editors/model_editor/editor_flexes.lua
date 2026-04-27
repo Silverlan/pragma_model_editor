@@ -156,8 +156,8 @@ end
 	table.insert(self.m_tOptions,{pLb,pSlider})
 	return pSlider
 end]]
-function gui.WIModelEditorFlexes:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorFlexes:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 	self:UpdateOptions()
 end
 function gui.WIModelEditorFlexes:UpdateOptions()

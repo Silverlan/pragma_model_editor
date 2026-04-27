@@ -202,8 +202,8 @@ function gui.WIModelEditorTextures:SetModel(mdl)
 		pEditor:UpdateModel()
 	end
 end
-function gui.WIModelEditorTextures:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorTextures:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 	if util.is_valid(self.m_pTextures) == true then
 		self.m_pTextures:ApplySize(w, 128)
 	end

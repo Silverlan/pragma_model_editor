@@ -151,7 +151,7 @@ function gui.WIModelEditorPhysics:SetModel(mdl)
 		end
 	end
 end
-function gui.WIModelEditorPhysics:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorPhysics:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 end
 gui.register("model_editor_physics", gui.WIModelEditorPhysics)

@@ -163,8 +163,8 @@ function gui.WIModelEditorBlendControllers:SetModel(mdl)
 		pRow:SetValue(4, "0.0")
 	end
 end
-function gui.WIModelEditorBlendControllers:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorBlendControllers:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 
 	if util.is_valid(self.m_pBlendControllers) == false then
 		return

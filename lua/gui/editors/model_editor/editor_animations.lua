@@ -565,8 +565,8 @@ function gui.WIModelEditorAnimations:ShowControls(b)
 		self.m_pLabelSpeed:SetVisible(b)
 	end
 end
-function gui.WIModelEditorAnimations:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorAnimations:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 
 	if util.is_valid(self.m_pAnimations) == false then
 		return

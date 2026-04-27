@@ -1159,8 +1159,8 @@ function gui.WIModelView:Render()
 	self.m_bRenderScheduled = true
 	self.m_updateCamera = true
 end
-function gui.WIModelView:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelView:OnSizeChanged(...)
+	gui.Base.OnSizeChanged(self, ...)
 	self:Update()
 end
 function gui.WIModelView:GetEntity(actorIdx)

@@ -193,8 +193,8 @@ function gui.WIModelEditorAttachments:SetModel(mdl)
 		end)
 	end
 end
-function gui.WIModelEditorAttachments:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorAttachments:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 
 	if util.is_valid(self.m_pAttachments) == false then
 		return

@@ -176,8 +176,8 @@ function gui.WIModelEditorSkeleton:SetModel(mdl)
 	self:UpdateSkeleton()
 	pSkeleton:ExpandAll()
 end
-function gui.WIModelEditorSkeleton:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorSkeleton:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 	if util.is_valid(self.m_pBones) then
 		self.m_pBones:ApplyWidth(w - 20)
 	end

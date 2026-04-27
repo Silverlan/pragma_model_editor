@@ -170,7 +170,7 @@ function gui.WIModelEditorMeshes:SetModel(mdl)
 	end
 	pMeshes:ExpandAll()
 end
-function gui.WIModelEditorMeshes:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function gui.WIModelEditorMeshes:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 end
 gui.register("model_editor_meshes", gui.WIModelEditorMeshes)

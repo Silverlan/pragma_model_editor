@@ -770,8 +770,8 @@ function ModelViewer:PlayAnimation(anim)
 	end
 	self.m_pModelView:PlayAnimation(anim)
 end
-function ModelViewer:OnSizeChanged(w, h)
-	gui.Base.OnSizeChanged(self, w, h)
+function ModelViewer:OnSizeChanged(w, h, ...)
+	gui.Base.OnSizeChanged(self, w, h, ...)
 	if util.is_valid(self.m_pTabSkeleton) == true then
 		local pBones = self.m_pTabSkeleton.m_pBones
 		if util.is_valid(pBones) == true then
