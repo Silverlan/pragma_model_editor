@@ -462,6 +462,11 @@ function gui.WIModelView:InitializeViewport(width, height)
 		return
 	end
 
+	-- Hide gizmos and helpers from the render
+	local visMask = self.m_scene:GetVisibilityMask()
+	visMask = bit.band(visMask, bit.bnot(bit.bor(game.RENDER_LAYER_HELPER, game.RENDER_LAYER_GIZMO)))
+	self.m_scene:SetVisibilityMask(visMask)
+
 	local entCam = ents.create("env_camera")
 	entCam:RemoveFromAllScenes()
 	entCam:AddToScene(self.m_scene)
